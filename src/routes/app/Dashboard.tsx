@@ -305,7 +305,7 @@ function AdminDashboard({ data }: { data: any }) {
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
-              <div className="absolute top-[105px] flex flex-col items-center">
+              <div className="absolute top-26.25 flex flex-col items-center">
                 <span className="text-3xl font-extrabold text-foreground">{totalEmps}</span>
                 <span className="text-xs text-muted-foreground font-semibold">Employees</span>
               </div>
@@ -743,7 +743,7 @@ function EmployeeDashboard({ data }: { data: any }) {
                 recentNotifications.map((n: any) => (
                   <div key={n.id} className="text-xs py-1 border-b border-border/60 last:border-0">
                     <div className="flex justify-between items-start">
-                      <span className="font-medium text-foreground truncate max-w-[150px]">{n.title}</span>
+                      <span className="font-medium text-foreground truncate max-w-37.5">{n.title}</span>
                       <span className="text-[9px] text-muted-foreground">{formatDate(n.createdAt)}</span>
                     </div>
                     <p className="text-[10px] text-muted-foreground line-clamp-1 mt-0.5">{n.body}</p>

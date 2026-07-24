@@ -19,17 +19,17 @@ async function main() {
 
     // 2. Admin Employee — upsert by unique email, no hardcoded UUID
     //    Use createOrUpdate pattern: find first, then upsert by email unique constraint.
-    const adminEmail = "admin@workzen.solutions";
+    const adminEmail = "admin@pulsehr.solutions";
 
     const existingAdmin = await tx.employee.findUnique({ where: { email: adminEmail } });
 
     const adminData = {
-      employeeCode: "CVS-000",
-      fullName: "Admin Vertex",
+      employeeCode: "PHR-000",
+      fullName: "PulseHR Admin",
       email: adminEmail,
       phone: "+92 300 0000000",
       cnic: "00000-0000000-0",
-      address: "CodeVertex Head Office, Karachi",
+      address: "PulseHR Head Office, Karachi",
       gender: "other" as const,
       dob: date("1990-01-01"),
       designation: "System Administrator",

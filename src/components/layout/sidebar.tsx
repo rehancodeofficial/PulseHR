@@ -189,7 +189,7 @@ export function Sidebar() {
 
       {/* Upgrade to Premium Card */}
       <div className="px-4 py-3 shrink-0">
-        <div className="rounded-2xl bg-gradient-to-br from-[#123126] to-[#0a1a14] p-4 border border-white/5 shadow-md relative overflow-hidden">
+        <div className="rounded-2xl bg-linear-to-br from-[#123126] to-[#0a1a14] p-4 border border-white/5 shadow-md relative overflow-hidden">
           <div className="text-xs font-bold text-white mb-1">Upgrade to Premium</div>
           <div className="text-[10px] text-sidebar-foreground/70 leading-relaxed mb-3">
             Get interesting features and can improve your performance.

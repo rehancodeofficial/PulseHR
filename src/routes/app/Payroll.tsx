@@ -454,7 +454,7 @@ function GeneratePayrollDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-card sm:max-w-[420px]">
+      <DialogContent className="bg-card sm:max-w-105">
         <DialogHeader>
           <DialogTitle>Generate Payroll</DialogTitle>
           <DialogDescription>
