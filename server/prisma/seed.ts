@@ -19,7 +19,7 @@ async function main() {
 
     // 2. Admin Employee — upsert by unique email, no hardcoded UUID
     //    Use createOrUpdate pattern: find first, then upsert by email unique constraint.
-    const adminEmail = "admin@codevertex.io";
+    const adminEmail = "admin@workzen.solutions";
 
     const existingAdmin = await tx.employee.findUnique({ where: { email: adminEmail } });
 
@@ -80,10 +80,10 @@ async function main() {
     });
   });
 
-  console.log(`✅ Seed completed.`);
-  console.log(`   Admin login: admin@codevertex.io`);
+  console.log(`Seed completed.`);
+  console.log(`   Admin login: admin@workzen.solutions`);
   console.log(`   Password:    ${config.DEFAULT_EMPLOYEE_PASSWORD || "ChangeMe@Prod1"}`);
-  console.log(`   ⚠️  Change the admin password immediately after first login in production.`);
+  console.log(`   Change the admin password immediately after first login in production.`);
 }
 
 main()

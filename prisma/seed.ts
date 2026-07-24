@@ -20,7 +20,7 @@ async function main() {
     });
 
     // 2. Admin Employee
-    const adminEmail = "admin@codevertex.solutions";
+    const adminEmail = "admin@pulsehr.solutions";
     const adminEmployee = await tx.employee.create({
       data: {
         employeeCode: "CVS-000",
@@ -54,7 +54,7 @@ async function main() {
     });
 
     // 3. Employee Account
-    const empEmail = "rehan@codevertex.solutions";
+    const empEmail = "rehan@pulsehr.solutions";
     const employeeUser = await tx.employee.create({
       data: {
         employeeCode: "CVS-001",
@@ -99,9 +99,9 @@ async function main() {
     });
   });
 
-  console.log(`✅ Seed completed.`);
-  console.log(`   Admin login: admin@codevertex.solutions`);
-  console.log(`   Employee login: rehan@codevertex.solutions`);
+  console.log(`Seed completed.`);
+  console.log(`   Admin login: admin@pulsehr.solutions`);
+  console.log(`   Employee login: rehan@pulsehr.solutions`);
   console.log(`   Password:    123456`);
 }
 
