@@ -1,12 +1,21 @@
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 
+const CARD_SHADOW =
+  "8px 8px 24px rgba(45,74,43,0.13), -6px -6px 16px rgba(255,255,255,0.85), inset 0 1px 0 rgba(255,255,255,0.6)";
+
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
+  ({ className, style, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("rounded-xl border bg-card text-card-foreground shadow", className)}
+      className={cn("text-card-foreground", className)}
+      style={{
+        background: "#FAFAF7",
+        borderRadius: 28,
+        border: "none",
+        boxShadow: CARD_SHADOW,
+        ...style,
+      }}
       {...props}
     />
   ),
@@ -25,6 +34,7 @@ const CardTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
     <div
       ref={ref}
       className={cn("font-semibold leading-none tracking-tight", className)}
+      style={{ color: "#2A3324" }}
       {...props}
     />
   ),
@@ -33,7 +43,7 @@ CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
+    <div ref={ref} className={cn("text-sm", className)} style={{ color: "#6B7862" }} {...props} />
   ),
 );
 CardDescription.displayName = "CardDescription";
