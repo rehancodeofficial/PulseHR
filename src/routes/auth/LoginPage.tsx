@@ -31,18 +31,17 @@ function ClayInput({
       placeholder={placeholder}
       autoComplete={autoComplete}
       required={required}
-      className="clay-input w-full h-11 px-4 text-sm placeholder:text-[#7A9070] focus:outline-none"
+      className="clay-input w-full h-11 px-4 text-sm placeholder:text-[#6B5A2E] focus:outline-none"
       style={{
-        boxShadow:
-          "inset 3px 3px 8px rgba(45,74,43,0.14), inset -2px -2px 6px rgba(255,255,255,0.78)",
+        boxShadow: "var(--shadow-inset)",
+        background: "var(--input)",
+        color: "var(--foreground)",
       }}
       onFocus={(e) => {
-        e.currentTarget.style.boxShadow =
-          "inset 3px 3px 10px rgba(45,74,43,0.18), inset -2px -2px 6px rgba(255,255,255,0.78), 0 0 0 2.5px rgba(139,170,60,0.45)";
+        e.currentTarget.style.boxShadow = "var(--shadow-inset), 0 0 0 2.5px var(--ring)";
       }}
       onBlur={(e) => {
-        e.currentTarget.style.boxShadow =
-          "inset 3px 3px 8px rgba(45,74,43,0.14), inset -2px -2px 6px rgba(255,255,255,0.78)";
+        e.currentTarget.style.boxShadow = "var(--shadow-inset)";
       }}
     />
   );
@@ -82,15 +81,14 @@ export function LoginPage() {
 
   return (
     <div
-      className="min-h-screen grid lg:grid-cols-2"
-      style={{ background: "linear-gradient(160deg, #EDF2E6 0%, #E4ECD9 50%, #DDE8D0 100%)" }}
+      className="min-h-screen grid lg:grid-cols-2 transition-colors duration-200"
+      style={{ background: "var(--background)" }}
     >
       {/* ── Left clay hero panel ── */}
       <div
         className="relative hidden lg:flex flex-col justify-between p-12 overflow-hidden"
         style={{
-          background:
-            "linear-gradient(145deg, #3A5C38 0%, #4A6741 28%, #5C7A3E 58%, #3D5C2A 100%)",
+          background: "var(--gradient-primary)",
         }}
       >
         {/* Organic blob orbs for depth */}
@@ -102,7 +100,7 @@ export function LoginPage() {
             width: "340px",
             height: "340px",
             borderRadius: "999px",
-            background: "radial-gradient(circle, rgba(168,196,138,0.28) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
             filter: "blur(2px)",
           }}
         />
@@ -126,7 +124,7 @@ export function LoginPage() {
             width: "180px",
             height: "180px",
             borderRadius: "999px",
-            background: "radial-gradient(circle, rgba(139,170,60,0.18) 0%, transparent 65%)",
+            background: "radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 65%)",
           }}
         />
 
@@ -134,11 +132,11 @@ export function LoginPage() {
         <div className="relative flex items-center gap-3">
           <div
             className="clay-logo flex items-center justify-center p-2.5"
-            style={{ width: 48, height: 48 }}
+            style={{ width: 48, height: 48, background: "var(--card)", boxShadow: "var(--shadow-glow)" }}
           >
             <img src="/logo.png" alt="PulseHR Logo" className="w-full h-full object-contain" />
           </div>
-          <div className="leading-tight text-white">
+          <div className="leading-tight" style={{ color: "var(--primary-foreground)" }}>
             <div className="font-display text-lg font-bold tracking-tight">PulseHR</div>
             <div className="text-[10px] uppercase tracking-[0.22em] opacity-75">
               HR Management Platform
@@ -147,23 +145,24 @@ export function LoginPage() {
         </div>
 
         {/* Hero copy */}
-        <div className="relative text-white space-y-7">
+        <div className="relative space-y-7" style={{ color: "var(--primary-foreground)" }}>
           {/* Enterprise pill badge */}
           <div
-            className="clay-badge inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] px-4 py-2 text-white/90"
+            className="clay-badge inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] px-4 py-2"
+            style={{ background: "rgba(255,255,255,0.12)", color: "var(--primary-foreground)" }}
           >
-            <Sparkles className="size-3.5 text-[#c8e07a]" />
+            <Sparkles className="size-3.5 text-inherit" />
             Enterprise EMS Platform
           </div>
 
           <h1
             className="font-display text-5xl font-bold leading-[1.06] max-w-md"
-            style={{ color: "#ffffff", textShadow: "0 2px 12px rgba(0,0,0,0.18)" }}
+            style={{ color: "var(--primary-foreground)", textShadow: "0 2px 12px rgba(0,0,0,0.15)" }}
           >
             Run your entire workforce from one premium workspace.
           </h1>
 
-          <p className="text-base max-w-md" style={{ color: "rgba(255,255,255,0.84)" }}>
+          <p className="text-base max-w-md opacity-90">
             Employees, attendance, leave, projects, assets and audit logs — unified, role-aware, and
             built for scale.
           </p>
@@ -178,15 +177,16 @@ export function LoginPage() {
               <div
                 key={l}
                 className="clay-stat-pill flex flex-col gap-0.5"
+                style={{ background: "rgba(255,255,255,0.1)", boxShadow: "var(--shadow-glow)" }}
               >
-                <div className="font-display text-2xl font-bold text-white">{v}</div>
-                <div className="text-[10px] uppercase tracking-wider text-white/72">{l}</div>
+                <div className="font-display text-2xl font-bold" style={{ color: "var(--primary-foreground)" }}>{v}</div>
+                <div className="text-[10px] uppercase tracking-wider opacity-80" style={{ color: "var(--primary-foreground)" }}>{l}</div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="relative text-[11px]" style={{ color: "rgba(255,255,255,0.60)" }}>
+        <div className="relative text-[11px] opacity-70" style={{ color: "var(--primary-foreground)" }}>
           © {new Date().getFullYear()} PulseHR. All rights reserved.
         </div>
       </div>
@@ -197,25 +197,25 @@ export function LoginPage() {
         <div
           className="clay-card w-full max-w-md p-9"
           style={{
-            boxShadow:
-              "10px 10px 28px rgba(45,74,43,0.17), -7px -7px 18px rgba(255,255,255,0.86), inset 0 1px 0 rgba(255,255,255,0.65)",
+            background: "var(--card)",
+            boxShadow: "var(--shadow-elevated)",
           }}
         >
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2.5 mb-6">
             <div
               className="clay-logo flex items-center justify-center p-1.5"
-              style={{ width: 38, height: 38 }}
+              style={{ width: 38, height: 38, background: "var(--card)", boxShadow: "var(--shadow-glow)" }}
             >
               <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
             </div>
-            <div className="font-display font-bold text-[#1F2B1A]">PulseHR</div>
+            <div className="font-display font-bold" style={{ color: "var(--foreground)" }}>PulseHR</div>
           </div>
 
-          <h2 className="font-display text-2xl font-bold" style={{ color: "#1F2B1A" }}>
+          <h2 className="font-display text-2xl font-bold" style={{ color: "var(--foreground)" }}>
             Sign in to your workspace
           </h2>
-          <p className="mt-1.5 text-sm" style={{ color: "#5A7255" }}>
+          <p className="mt-1.5 text-sm" style={{ color: "var(--muted-foreground)" }}>
             Enter your credentials to access the platform.
           </p>
 
@@ -225,7 +225,7 @@ export function LoginPage() {
               <label
                 htmlFor="email"
                 className="block text-sm font-semibold"
-                style={{ color: "#2D4A2B" }}
+                style={{ color: "var(--foreground)" }}
               >
                 Work email
               </label>
@@ -245,14 +245,14 @@ export function LoginPage() {
                 <label
                   htmlFor="password"
                   className="block text-sm font-semibold"
-                  style={{ color: "#2D4A2B" }}
+                  style={{ color: "var(--foreground)" }}
                 >
                   Password
                 </label>
                 <Link
                   to="/auth/forgot"
                   className="text-xs font-medium hover:underline"
-                  style={{ color: "#5C7A2A" }}
+                  style={{ color: "var(--primary)" }}
                 >
                   Forgot?
                 </Link>
@@ -284,10 +284,8 @@ export function LoginPage() {
                     width: 22,
                     height: 22,
                     borderRadius: 8,
-                    background: remember ? "#6B8E4E" : "#EEF3E6",
-                    boxShadow: remember
-                      ? "3px 3px 8px rgba(45,74,43,0.25), -2px -2px 5px rgba(255,255,255,0.5), inset 0 1px 0 rgba(255,255,255,0.18)"
-                      : "inset 2px 2px 6px rgba(45,74,43,0.13), inset -1px -1px 4px rgba(255,255,255,0.75)",
+                    background: remember ? "var(--primary)" : "var(--input)",
+                    boxShadow: remember ? "var(--shadow-glow)" : "var(--shadow-inset)",
                     transition: "all 0.18s ease",
                   }}
                   onClick={() => setRemember((v) => !v)}
@@ -296,7 +294,7 @@ export function LoginPage() {
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                       <path
                         d="M2 6l3 3 5-5"
-                        stroke="white"
+                        stroke="var(--primary-foreground)"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -305,7 +303,7 @@ export function LoginPage() {
                   )}
                 </span>
               </span>
-              <span className="text-sm" style={{ color: "#4A6741" }}>
+              <span className="text-sm font-medium" style={{ color: "var(--muted-foreground)" }}>
                 Remember me for 30 days
               </span>
             </label>
@@ -316,23 +314,20 @@ export function LoginPage() {
               disabled={loading}
               className="clay-button w-full h-11 flex items-center justify-center text-sm font-bold tracking-wide"
               style={{
-                background: loading
-                  ? "linear-gradient(145deg, #7A9830, #5A7820)"
-                  : "linear-gradient(145deg, #8BAA3C 0%, #6B8A2A 60%, #4E6B1F 100%)",
-                boxShadow:
-                  "5px 5px 16px rgba(45,74,43,0.30), -3px -3px 10px rgba(255,255,255,0.60), inset 0 1px 0 rgba(255,255,255,0.28)",
+                background: "var(--gradient-primary)",
+                boxShadow: "var(--shadow-glow)",
                 opacity: loading ? 0.8 : 1,
               }}
             >
               {loading ? <Loader2 className="size-4 animate-spin" /> : "Sign in"}
             </button>
 
-            <div className="text-center text-sm pt-1" style={{ color: "#5A7255" }}>
+            <div className="text-center text-sm pt-1" style={{ color: "var(--muted-foreground)" }}>
               Don't have an account?{" "}
               <Link
                 to="/auth/signup"
                 className="font-semibold hover:underline"
-                style={{ color: "#5C7A2A" }}
+                style={{ color: "var(--primary)" }}
               >
                 Register here
               </Link>
