@@ -66,10 +66,10 @@ export function Dashboard() {
     { name: "Des", "UI Designer": 450, "Project Manager": 350, "3D designer": 400, "UX Researcher": 300 },
   ];
 
-  // 2. Pie/Donut Chart Data for onsite vs remote
+  // 2. Pie/Donut Chart Data for onsite vs remote — clay palette
   const pieData = [
-    { name: "Onsite", value: onsite, color: "#a3e635" },
-    { name: "Remote", value: remote, color: "#1e463a" },
+    { name: "Onsite", value: onsite, color: "#9CB56E" },
+    { name: "Remote", value: remote, color: "#46613D" },
   ];
 
   // 3. KPI Mini-Charts Data
@@ -143,13 +143,22 @@ export function Dashboard() {
           </div>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={enrollmentData} barSize={8}>
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6b7f76", fontSize: 10, fontWeight: 500 }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6b7f76", fontSize: 10, fontWeight: 500 }} />
-              <Tooltip cursor={{ fill: "transparent" }} />
-              <Bar dataKey="UI Designer" stackId="a" fill="#071912" />
-              <Bar dataKey="Project Manager" stackId="a" fill="#1e463a" />
-              <Bar dataKey="3D designer" stackId="a" fill="#a3e635" />
-              <Bar dataKey="UX Researcher" stackId="a" fill="#d9e5df" radius={[4, 4, 0, 0]} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7862", fontSize: 10, fontWeight: 600 }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7862", fontSize: 10, fontWeight: 600 }} />
+              <Tooltip
+                contentStyle={{
+                  background: "#FAFAF7",
+                  borderRadius: 16,
+                  border: "none",
+                  boxShadow: "6px 6px 18px rgba(45,74,43,0.14), -4px -4px 10px rgba(255,255,255,0.8)",
+                  color: "#2A3324",
+                }}
+                cursor={{ fill: "rgba(156,181,110,0.06)" }}
+              />
+              <Bar dataKey="UI Designer" stackId="a" fill="#2A3324" radius={[0,0,0,0]} />
+              <Bar dataKey="Project Manager" stackId="a" fill="#46613D" />
+              <Bar dataKey="3D designer" stackId="a" fill="#9CB56E" />
+              <Bar dataKey="UX Researcher" stackId="a" fill="#D4E5BC" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -221,10 +230,10 @@ export function Dashboard() {
           </div>
           <div className="flex items-end justify-between">
             <div>
-              <div className="text-3xl font-extrabold text-foreground mb-1">102</div>
-              <div className="text-xs font-bold text-[#a3e635] flex items-center gap-1">
+              <div className="text-3xl font-extrabold mb-1" style={{ color: "#2A3324" }}>102</div>
+              <div className="text-xs font-bold flex items-center gap-1" style={{ color: "#9CB56E" }}>
                 +12 ↑
-                <span className="text-muted-foreground font-semibold">Last 12 Days</span>
+                <span className="font-semibold" style={{ color: "#6B7862" }}>Last 12 Days</span>
               </div>
             </div>
             <div className="w-28 h-12">
@@ -232,11 +241,11 @@ export function Dashboard() {
                 <AreaChart data={timeoffData}>
                   <defs>
                     <linearGradient id="areaLime" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#a3e635" stopOpacity={0.4} />
-                      <stop offset="100%" stopColor="#a3e635" stopOpacity={0} />
+                      <stop offset="0%" stopColor="#9CB56E" stopOpacity={0.4} />
+                      <stop offset="100%" stopColor="#9CB56E" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <Area type="monotone" dataKey="value" stroke="#a3e635" strokeWidth={2.5} fill="url(#areaLime)" dot={false} />
+                  <Area type="monotone" dataKey="value" stroke="#9CB56E" strokeWidth={2.5} fill="url(#areaLime)" dot={false} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -253,10 +262,10 @@ export function Dashboard() {
           </div>
           <div className="flex items-end justify-between">
             <div>
-              <div className="text-3xl font-extrabold text-foreground mb-1">{projects.length || 32}</div>
-              <div className="text-xs font-bold text-destructive flex items-center gap-1">
+              <div className="text-3xl font-extrabold mb-1" style={{ color: "#2A3324" }}>{projects.length || 32}</div>
+              <div className="text-xs font-bold flex items-center gap-1" style={{ color: "#C17A64" }}>
                 -09 ↓
-                <span className="text-muted-foreground font-semibold">Last 12 Days</span>
+                <span className="font-semibold" style={{ color: "#6B7862" }}>Last 12 Days</span>
               </div>
             </div>
             <div className="w-28 h-12">
@@ -264,11 +273,11 @@ export function Dashboard() {
                 <AreaChart data={projectAppliedData}>
                   <defs>
                     <linearGradient id="areaRed" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="var(--color-destructive)" stopOpacity={0.3} />
-                      <stop offset="100%" stopColor="var(--color-destructive)" stopOpacity={0} />
+                      <stop offset="0%" stopColor="#C17A64" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="#C17A64" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <Area type="monotone" dataKey="value" stroke="var(--color-destructive)" strokeWidth={2.5} fill="url(#areaRed)" dot={false} />
+                  <Area type="monotone" dataKey="value" stroke="#C17A64" strokeWidth={2.5} fill="url(#areaRed)" dot={false} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -323,19 +332,28 @@ export function Dashboard() {
               <AreaChart data={trackedData}>
                 <defs>
                   <linearGradient id="areaTracked" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#a3e635" stopOpacity={0.25} />
-                    <stop offset="100%" stopColor="#a3e635" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#9CB56E" stopOpacity={0.25} />
+                    <stop offset="100%" stopColor="#9CB56E" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <Tooltip />
+                <Tooltip
+                  contentStyle={{
+                    background: "#FAFAF7",
+                    borderRadius: 14,
+                    border: "none",
+                    boxShadow: "5px 5px 15px rgba(45,74,43,0.13), -3px -3px 8px rgba(255,255,255,0.75)",
+                    color: "#2A3324",
+                    fontSize: 12,
+                  }}
+                />
                 <Area
                   type="monotone"
                   dataKey="value"
-                  stroke="#a3e635"
+                  stroke="#9CB56E"
                   strokeWidth={3}
                   fill="url(#areaTracked)"
-                  dot={{ stroke: '#a3e635', strokeWidth: 2, r: 4, fill: '#fff' }}
-                  activeDot={{ r: 6 }}
+                  dot={{ stroke: "#9CB56E", strokeWidth: 2, r: 4, fill: "#FAFAF7" }}
+                  activeDot={{ r: 6, fill: "#9CB56E" }}
                 />
               </AreaChart>
             </ResponsiveContainer>
