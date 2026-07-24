@@ -135,14 +135,6 @@ const nav: NavItem[] = [
   },
 ];
 
-/* ── Clay sidebar shadow token ── */
-const SIDEBAR_SHADOW =
-  "8px 0 24px rgba(45,74,43,0.12), -4px 0 12px rgba(255,255,255,0.7)";
-const ACTIVE_PILL_SHADOW =
-  "4px 4px 12px rgba(45,74,43,0.22), -2px -2px 8px rgba(255,255,255,0.55), inset 0 1px 0 rgba(255,255,255,0.25)";
-const AVATAR_SHADOW =
-  "3px 3px 8px rgba(45,74,43,0.18), -2px -2px 6px rgba(255,255,255,0.70)";
-
 export function Sidebar() {
   const { pathname: path } = useLocation();
   const user = useAuth((s) => s.user);
@@ -159,10 +151,10 @@ export function Sidebar() {
 
   return (
     <aside
-      className="hidden md:flex w-64 min-w-[16rem] max-w-[16rem] flex-col h-screen sticky top-0"
+      className="hidden md:flex w-64 min-w-[16rem] max-w-[16rem] flex-col h-screen sticky top-0 transition-colors duration-200"
       style={{
-        background: "#FAFAF7",
-        boxShadow: SIDEBAR_SHADOW,
+        background: "var(--card)",
+        boxShadow: "var(--shadow-elevated)",
         zIndex: 30,
       }}
     >
@@ -173,18 +165,18 @@ export function Sidebar() {
           style={{
             width: 40,
             height: 40,
-            background: "linear-gradient(145deg, #46613D, #2A3E28)",
+            background: "var(--gradient-primary)",
             borderRadius: 14,
-            boxShadow: "4px 4px 10px rgba(45,74,43,0.28), -2px -2px 6px rgba(255,255,255,0.6)",
+            boxShadow: "var(--shadow-glow)",
           }}
         >
           <img src="/logo.png" alt="PulseHR" className="w-full h-full object-contain" />
         </div>
         <div>
-          <div className="text-base font-bold tracking-tight" style={{ color: "#2A3324" }}>
+          <div className="text-base font-bold tracking-tight" style={{ color: "var(--foreground)" }}>
             PulseHR
           </div>
-          <div className="text-[10px] tracking-wide font-medium" style={{ color: "#6B7862" }}>
+          <div className="text-[10px] tracking-wide font-medium" style={{ color: "var(--muted-foreground)" }}>
             HR Management Platform
           </div>
         </div>
@@ -195,13 +187,13 @@ export function Sidebar() {
         {/* Workspace section */}
         <div
           className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em]"
-          style={{ color: "#9CB56E" }}
+          style={{ color: "var(--primary)" }}
         >
           Main Menu
         </div>
         <div className="space-y-0.5">
           {workspaceItems.map((item) => (
-            <NavLink key={item.to} item={item} path={path} activePillShadow={ACTIVE_PILL_SHADOW} />
+            <NavLink key={item.to} item={item} path={path} />
           ))}
         </div>
 
@@ -210,13 +202,13 @@ export function Sidebar() {
           <div className="pt-4">
             <div
               className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em]"
-              style={{ color: "#9CB56E" }}
+              style={{ color: "var(--primary)" }}
             >
               {isEmployee ? "Resources" : "Admin Tools"}
             </div>
             <div className="space-y-0.5">
               {adminItems.map((item) => (
-                <NavLink key={item.to} item={item} path={path} activePillShadow={ACTIVE_PILL_SHADOW} />
+                <NavLink key={item.to} item={item} path={path} />
               ))}
             </div>
           </div>
@@ -229,23 +221,23 @@ export function Sidebar() {
         <div
           className="flex items-center gap-2.5 mb-3 px-3 py-3 rounded-2xl"
           style={{
-            background: "#EFF4E7",
-            boxShadow: "inset 2px 2px 6px rgba(45,74,43,0.1), inset -1px -1px 4px rgba(255,255,255,0.65)",
+            background: "var(--input)",
+            boxShadow: "var(--shadow-inset)",
           }}
         >
           <div
             className="shrink-0"
             style={{
               borderRadius: "50%",
-              boxShadow: AVATAR_SHADOW,
+              boxShadow: "var(--shadow-glow)",
             }}
           >
             <Avatar className="size-8">
               <AvatarFallback
                 className="text-xs font-bold"
                 style={{
-                  background: "linear-gradient(145deg, #9CB56E, #5C7A45)",
-                  color: "#FAFAF7",
+                  background: "var(--gradient-primary)",
+                  color: "var(--primary-foreground)",
                 }}
               >
                 {initials(user.name)}
@@ -253,14 +245,14 @@ export function Sidebar() {
             </Avatar>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-bold truncate" style={{ color: "#2A3324" }}>
+            <div className="text-xs font-bold truncate" style={{ color: "var(--foreground)" }}>
               {user.name}
             </div>
-            <div className="text-[10px] capitalize" style={{ color: "#6B7862" }}>
+            <div className="text-[10px] capitalize" style={{ color: "var(--muted-foreground)" }}>
               {user.role}
             </div>
           </div>
-          <UserCircle2 className="size-4 shrink-0" style={{ color: "#9CB56E" }} />
+          <UserCircle2 className="size-4 shrink-0" style={{ color: "var(--primary)" }} />
         </div>
 
         {/* Sign out */}
@@ -269,19 +261,10 @@ export function Sidebar() {
             await logout();
             navigate("/auth");
           }}
-          className="flex w-full items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all"
+          className="flex w-full items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all duration-150"
           style={{
-            color: "#C17A64",
+            color: "var(--destructive)",
             background: "transparent",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#FFF0EC";
-            e.currentTarget.style.boxShadow =
-              "3px 3px 8px rgba(193,122,100,0.12), -2px -2px 6px rgba(255,255,255,0.7)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "transparent";
-            e.currentTarget.style.boxShadow = "none";
           }}
         >
           <LogOut className="size-4 shrink-0" />
@@ -295,11 +278,9 @@ export function Sidebar() {
 function NavLink({
   item,
   path,
-  activePillShadow,
 }: {
   item: NavItem;
   path: string;
-  activePillShadow: string;
 }) {
   const active = path === item.to || path.startsWith(item.to + "/");
   const Icon = item.icon;
@@ -313,37 +294,22 @@ function NavLink({
       style={
         active
           ? {
-              background: "linear-gradient(145deg, #9CB56E 0%, #5C7A45 100%)",
-              color: "#FAFAF7",
-              boxShadow: activePillShadow,
+              background: "var(--gradient-primary)",
+              color: "var(--primary-foreground)",
+              boxShadow: "var(--shadow-glow)",
               fontWeight: 700,
             }
           : {
-              color: "#6B7862",
+              color: "var(--muted-foreground)",
             }
       }
-      onMouseEnter={(e) => {
-        if (!active) {
-          e.currentTarget.style.background = "#EFF4E7";
-          e.currentTarget.style.color = "#2A3324";
-          e.currentTarget.style.boxShadow =
-            "inset 2px 2px 5px rgba(45,74,43,0.08), inset -1px -1px 3px rgba(255,255,255,0.6)";
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!active) {
-          e.currentTarget.style.background = "transparent";
-          e.currentTarget.style.color = "#6B7862";
-          e.currentTarget.style.boxShadow = "none";
-        }
-      }}
     >
       <Icon
         className="size-4 shrink-0"
-        style={{ color: active ? "#FAFAF7" : "#9CB56E" }}
+        style={{ color: active ? "var(--primary-foreground)" : "var(--primary)" }}
       />
       <span className="flex-1 truncate">{item.label}</span>
-      {active && <ChevronRight className="size-3.5 shrink-0" style={{ color: "#FAFAF7" }} />}
+      {active && <ChevronRight className="size-3.5 shrink-0" style={{ color: "var(--primary-foreground)" }} />}
     </Link>
   );
 }

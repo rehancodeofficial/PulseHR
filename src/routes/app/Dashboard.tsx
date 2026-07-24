@@ -68,8 +68,8 @@ export function Dashboard() {
 
   // 2. Pie/Donut Chart Data for onsite vs remote — clay palette
   const pieData = [
-    { name: "Onsite", value: onsite, color: "#9CB56E" },
-    { name: "Remote", value: remote, color: "#46613D" },
+    { name: "Onsite", value: onsite, color: "var(--chart-1)" },
+    { name: "Remote", value: remote, color: "var(--chart-4)" },
   ];
 
   // 3. KPI Mini-Charts Data
@@ -125,40 +125,40 @@ export function Dashboard() {
           {/* Custom Legends */}
           <div className="flex flex-wrap gap-4 mb-6 text-xs font-semibold">
             <div className="flex items-center gap-2">
-              <span className="size-2.5 rounded-full bg-[#071912]" />
+              <span className="size-2.5 rounded-full" style={{ background: "var(--chart-5)" }} />
               <span className="text-muted-foreground">UI Designer</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="size-2.5 rounded-full bg-[#1e463a]" />
+              <span className="size-2.5 rounded-full" style={{ background: "var(--chart-4)" }} />
               <span className="text-muted-foreground">Project Manager</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="size-2.5 rounded-full bg-[#a3e635]" />
+              <span className="size-2.5 rounded-full" style={{ background: "var(--chart-1)" }} />
               <span className="text-muted-foreground">3D designer</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="size-2.5 rounded-full bg-[#d9e5df]" />
+              <span className="size-2.5 rounded-full" style={{ background: "var(--chart-3)" }} />
               <span className="text-muted-foreground">UX Researcher</span>
             </div>
           </div>
           <ResponsiveContainer width="100%" height={260}>
             <BarChart data={enrollmentData} barSize={8}>
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6B7862", fontSize: 10, fontWeight: 600 }} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6B7862", fontSize: 10, fontWeight: 600 }} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 10, fontWeight: 600 }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fill: "var(--muted-foreground)", fontSize: 10, fontWeight: 600 }} />
               <Tooltip
                 contentStyle={{
-                  background: "#FAFAF7",
+                  background: "var(--card)",
                   borderRadius: 16,
                   border: "none",
-                  boxShadow: "6px 6px 18px rgba(45,74,43,0.14), -4px -4px 10px rgba(255,255,255,0.8)",
-                  color: "#2A3324",
+                  boxShadow: "var(--shadow-elevated)",
+                  color: "var(--foreground)",
                 }}
-                cursor={{ fill: "rgba(156,181,110,0.06)" }}
+                cursor={{ fill: "rgba(232,185,58,0.06)" }}
               />
-              <Bar dataKey="UI Designer" stackId="a" fill="#2A3324" radius={[0,0,0,0]} />
-              <Bar dataKey="Project Manager" stackId="a" fill="#46613D" />
-              <Bar dataKey="3D designer" stackId="a" fill="#9CB56E" />
-              <Bar dataKey="UX Researcher" stackId="a" fill="#D4E5BC" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="UI Designer" stackId="a" fill="var(--chart-5)" radius={[0,0,0,0]} />
+              <Bar dataKey="Project Manager" stackId="a" fill="var(--chart-4)" />
+              <Bar dataKey="3D designer" stackId="a" fill="var(--chart-1)" />
+              <Bar dataKey="UX Researcher" stackId="a" fill="var(--chart-3)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -200,11 +200,11 @@ export function Dashboard() {
             {/* Legend Grid */}
             <div className="flex justify-between items-center text-xs font-semibold px-4 pt-2">
               <div className="flex items-center gap-2">
-                <span className="size-2.5 rounded-full bg-[#a3e635]" />
+                <span className="size-2.5 rounded-full" style={{ background: "var(--chart-1)" }} />
                 <span className="text-foreground">{onsite} Onsite</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="size-2.5 rounded-full bg-[#1e463a]" />
+                <span className="size-2.5 rounded-full" style={{ background: "var(--chart-4)" }} />
                 <span className="text-foreground">{remote} Remote</span>
               </div>
             </div>
@@ -230,10 +230,10 @@ export function Dashboard() {
           </div>
           <div className="flex items-end justify-between">
             <div>
-              <div className="text-3xl font-extrabold mb-1" style={{ color: "#2A3324" }}>102</div>
-              <div className="text-xs font-bold flex items-center gap-1" style={{ color: "#9CB56E" }}>
+              <div className="text-3xl font-extrabold mb-1" style={{ color: "var(--foreground)" }}>102</div>
+              <div className="text-xs font-bold flex items-center gap-1" style={{ color: "var(--success)" }}>
                 +12 ↑
-                <span className="font-semibold" style={{ color: "#6B7862" }}>Last 12 Days</span>
+                <span className="font-semibold" style={{ color: "var(--muted-foreground)" }}>Last 12 Days</span>
               </div>
             </div>
             <div className="w-28 h-12">
@@ -241,11 +241,11 @@ export function Dashboard() {
                 <AreaChart data={timeoffData}>
                   <defs>
                     <linearGradient id="areaLime" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#9CB56E" stopOpacity={0.4} />
-                      <stop offset="100%" stopColor="#9CB56E" stopOpacity={0} />
+                      <stop offset="0%" stopColor="var(--chart-2)" stopOpacity={0.4} />
+                      <stop offset="100%" stopColor="var(--chart-2)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <Area type="monotone" dataKey="value" stroke="#9CB56E" strokeWidth={2.5} fill="url(#areaLime)" dot={false} />
+                  <Area type="monotone" dataKey="value" stroke="var(--chart-2)" strokeWidth={2.5} fill="url(#areaLime)" dot={false} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -262,10 +262,10 @@ export function Dashboard() {
           </div>
           <div className="flex items-end justify-between">
             <div>
-              <div className="text-3xl font-extrabold mb-1" style={{ color: "#2A3324" }}>{projects.length || 32}</div>
-              <div className="text-xs font-bold flex items-center gap-1" style={{ color: "#C17A64" }}>
+              <div className="text-3xl font-extrabold mb-1" style={{ color: "var(--foreground)" }}>{projects.length || 32}</div>
+              <div className="text-xs font-bold flex items-center gap-1" style={{ color: "var(--destructive)" }}>
                 -09 ↓
-                <span className="font-semibold" style={{ color: "#6B7862" }}>Last 12 Days</span>
+                <span className="font-semibold" style={{ color: "var(--muted-foreground)" }}>Last 12 Days</span>
               </div>
             </div>
             <div className="w-28 h-12">
@@ -273,11 +273,11 @@ export function Dashboard() {
                 <AreaChart data={projectAppliedData}>
                   <defs>
                     <linearGradient id="areaRed" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#C17A64" stopOpacity={0.3} />
-                      <stop offset="100%" stopColor="#C17A64" stopOpacity={0} />
+                      <stop offset="0%" stopColor="var(--chart-4)" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="var(--chart-4)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <Area type="monotone" dataKey="value" stroke="#C17A64" strokeWidth={2.5} fill="url(#areaRed)" dot={false} />
+                  <Area type="monotone" dataKey="value" stroke="var(--chart-4)" strokeWidth={2.5} fill="url(#areaRed)" dot={false} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -332,28 +332,28 @@ export function Dashboard() {
               <AreaChart data={trackedData}>
                 <defs>
                   <linearGradient id="areaTracked" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#9CB56E" stopOpacity={0.25} />
-                    <stop offset="100%" stopColor="#9CB56E" stopOpacity={0} />
+                    <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.25} />
+                    <stop offset="100%" stopColor="var(--chart-1)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <Tooltip
                   contentStyle={{
-                    background: "#FAFAF7",
+                    background: "var(--card)",
                     borderRadius: 14,
                     border: "none",
-                    boxShadow: "5px 5px 15px rgba(45,74,43,0.13), -3px -3px 8px rgba(255,255,255,0.75)",
-                    color: "#2A3324",
+                    boxShadow: "var(--shadow-elevated)",
+                    color: "var(--foreground)",
                     fontSize: 12,
                   }}
                 />
                 <Area
                   type="monotone"
                   dataKey="value"
-                  stroke="#9CB56E"
+                  stroke="var(--chart-1)"
                   strokeWidth={3}
                   fill="url(#areaTracked)"
-                  dot={{ stroke: "#9CB56E", strokeWidth: 2, r: 4, fill: "#FAFAF7" }}
-                  activeDot={{ r: 6, fill: "#9CB56E" }}
+                  dot={{ stroke: "var(--chart-1)", strokeWidth: 2, r: 4, fill: "var(--card)" }}
+                  activeDot={{ r: 6, fill: "var(--chart-1)" }}
                 />
               </AreaChart>
             </ResponsiveContainer>
