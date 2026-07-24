@@ -159,3 +159,121 @@
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;
 }
+
+/* =============================================
+   CLAYMORPHISM AUTH SYSTEM
+   ============================================= */
+
+@utility clay-card {
+  background: #F5F7F0;
+  border-radius: 32px;
+  border: none;
+  box-shadow:
+    8px 8px 24px rgba(45, 74, 43, 0.18),
+    -6px -6px 16px rgba(255, 255, 255, 0.82),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+@utility clay-panel {
+  background: linear-gradient(145deg, #3A5C38 0%, #4A6741 30%, #5C7A3E 60%, #3D5C2A 100%);
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+@utility clay-input {
+  background: #EEF3E6;
+  border: none;
+  border-radius: 16px;
+  box-shadow:
+    inset 3px 3px 8px rgba(45, 74, 43, 0.14),
+    inset -2px -2px 6px rgba(255, 255, 255, 0.72);
+  color: #1F2B1A;
+  transition: box-shadow 0.2s ease;
+}
+
+@utility clay-input:focus {
+  box-shadow:
+    inset 3px 3px 10px rgba(45, 74, 43, 0.18),
+    inset -2px -2px 6px rgba(255, 255, 255, 0.72),
+    0 0 0 2px rgba(139, 170, 60, 0.4);
+  outline: none;
+}
+
+@utility clay-select {
+  background: #EEF3E6;
+  border: none;
+  border-radius: 16px;
+  box-shadow:
+    inset 3px 3px 8px rgba(45, 74, 43, 0.14),
+    inset -2px -2px 6px rgba(255, 255, 255, 0.72);
+  color: #1F2B1A;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234A6741' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+@utility clay-button {
+  background: linear-gradient(145deg, #8BAA3C 0%, #6B8A2A 60%, #4E6B1F 100%);
+  border: none;
+  border-radius: 18px;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  box-shadow:
+    5px 5px 15px rgba(45, 74, 43, 0.30),
+    -3px -3px 10px rgba(255, 255, 255, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: box-shadow 0.18s ease, transform 0.12s ease;
+}
+
+@utility clay-button:hover {
+  box-shadow:
+    6px 6px 18px rgba(45, 74, 43, 0.35),
+    -3px -3px 10px rgba(255, 255, 255, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+@utility clay-button:active {
+  box-shadow:
+    2px 2px 8px rgba(45, 74, 43, 0.25),
+    -1px -1px 5px rgba(255, 255, 255, 0.45),
+    inset 1px 1px 4px rgba(45, 74, 43, 0.15);
+  transform: translateY(1px);
+}
+
+@utility clay-logo {
+  background: linear-gradient(145deg, #2A3E28, #1A2E18);
+  border-radius: 20px;
+  box-shadow:
+    4px 4px 12px rgba(10, 20, 10, 0.4),
+    -2px -2px 8px rgba(255, 255, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+@utility clay-badge {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  box-shadow:
+    inset 2px 2px 6px rgba(0, 0, 0, 0.12),
+    inset -1px -1px 4px rgba(255, 255, 255, 0.18);
+  border: none;
+  backdrop-filter: blur(8px);
+}
+
+@utility clay-stat-pill {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 10px 14px;
+  box-shadow:
+    3px 3px 10px rgba(0, 0, 0, 0.15),
+    -2px -2px 6px rgba(255, 255, 255, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+@utility clay-form-bg {
+  background: linear-gradient(160deg, #EDF2E6 0%, #E4ECD9 50%, #DDE8D0 100%);
+}
