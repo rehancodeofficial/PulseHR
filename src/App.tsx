@@ -59,10 +59,13 @@ function PageLoader() {
   );
 }
 
+import { ThemeProvider } from "./components/theme-provider";
+
 export function App() {
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Routes>
+    <ThemeProvider defaultTheme="system">
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
         {/* Redirect root to auth */}
         <Route path="/" element={<Navigate to="/auth" replace />} />
 
@@ -107,7 +110,8 @@ export function App() {
 
         {/* 404 */}
         <Route path="*" element={<Navigate to="/auth" replace />} />
-      </Routes>
-    </Suspense>
+        </Routes>
+      </Suspense>
+    </ThemeProvider>
   );
 }
