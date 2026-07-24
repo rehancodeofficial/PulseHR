@@ -9,7 +9,7 @@ const server = http.createServer(app);
 initRealtime(server);
 
 server.listen(config.PORT, "0.0.0.0", () => {
-  console.log(`VertexEMS API listening on http://0.0.0.0:${config.PORT}`);
+  console.log(`PulseHR API listening on http://0.0.0.0:${config.PORT}`);
 });
 
 async function shutdown(signal: string) {

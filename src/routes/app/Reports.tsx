@@ -155,7 +155,7 @@ export function ReportsPage() {
               ${rows.map((row) => `<tr>${row.map((val) => `<td>${val || "—"}</td>`).join("")}</tr>`).join("")}
             </tbody>
           </table>
-          <div class="footer">VertexEMS Enterprise Platform · Code Vertex Solutions</div>
+          <div class="footer">PulseHR Enterprise Platform</div>
           <script>
             window.onload = function() { window.print(); }
           </script>

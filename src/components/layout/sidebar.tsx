@@ -151,55 +151,67 @@ export function Sidebar() {
   const adminItems = items.filter((i) => i.section === "admin");
 
   return (
-    <aside className="hidden md:flex w-64 min-w-[16rem] max-w-[16rem] flex-col border-r border-border bg-sidebar/80 backdrop-blur-xl h-screen sticky top-0">
+    <aside className="hidden md:flex w-64 min-w-[16rem] max-w-[16rem] flex-col bg-sidebar h-screen sticky top-0 border-r border-sidebar-border/10">
       {/* Logo */}
-      <div className="flex items-center gap-2.5 px-5 h-16 border-b border-sidebar-border shrink-0">
-        <div className="size-9 rounded-lg gradient-primary flex items-center justify-center shadow-glow shrink-0 p-1">
-          <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
-        </div>
-        <div className="leading-tight min-w-0">
-          <div className="text-sm font-semibold tracking-tight truncate">VertexEMS</div>
-          <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground truncate">
-            Code Vertex
-          </div>
+      <div className="flex flex-col gap-1 px-6 py-7 shrink-0">
+        <div className="text-2xl font-bold tracking-tight text-white">PulseHR</div>
+        <div className="text-[10px] tracking-wider text-sidebar-foreground/60 font-medium">
+          HR management Platform
         </div>
       </div>
 
       {/* Nav — scrollable */}
-      <nav className="flex-1 overflow-y-auto scrollbar-thin px-3 py-4 space-y-0.5">
+      <nav className="flex-1 overflow-y-auto scrollbar-thin px-3 py-2 space-y-1">
         {/* Workspace section */}
-        <div className="px-2 pb-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-          {isEmployee ? "My Workspace" : "Workspace"}
+        <div className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-sidebar-foreground/45">
+          Main Menu
         </div>
-        {workspaceItems.map((item) => (
-          <NavLink key={item.to} item={item} path={path} />
-        ))}
+        <div className="space-y-1">
+          {workspaceItems.map((item) => (
+            <NavLink key={item.to} item={item} path={path} />
+          ))}
+        </div>
 
         {/* Admin Tools section — only if user has admin-section items */}
         {adminItems.length > 0 && (
-          <>
-            <div className="px-2 pt-4 pb-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+          <div className="pt-4">
+            <div className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-sidebar-foreground/45">
               {isEmployee ? "Resources" : "Admin Tools"}
             </div>
-            {adminItems.map((item) => (
-              <NavLink key={item.to} item={item} path={path} />
-            ))}
-          </>
+            <div className="space-y-1">
+              {adminItems.map((item) => (
+                <NavLink key={item.to} item={item} path={path} />
+              ))}
+            </div>
+          </div>
         )}
       </nav>
 
+      {/* Upgrade to Premium Card */}
+      <div className="px-4 py-3 shrink-0">
+        <div className="rounded-2xl bg-gradient-to-br from-[#123126] to-[#0a1a14] p-4 border border-white/5 shadow-md relative overflow-hidden">
+          <div className="text-xs font-bold text-white mb-1">Upgrade to Premium</div>
+          <div className="text-[10px] text-sidebar-foreground/70 leading-relaxed mb-3">
+            Get interesting features and can improve your performance.
+          </div>
+          <button className="w-full py-2 px-3 bg-primary text-primary-foreground font-semibold text-xs rounded-xl shadow-sm hover:opacity-90 transition-opacity">
+            Upgrade Now
+          </button>
+        </div>
+      </div>
+
       {/* User footer */}
-      <div className="border-t border-sidebar-border p-3 shrink-0">
-        <div className="flex items-center gap-2.5 mb-2 px-2 py-1.5 rounded-lg hover:bg-sidebar-accent/40 transition-colors cursor-default">
+      <div className="border-t border-sidebar-border/10 p-3 shrink-0">
+        <div className="flex items-center gap-2.5 mb-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition-colors cursor-default">
           <Avatar className="size-8 shrink-0">
-            <AvatarFallback className="text-xs gradient-primary text-primary-foreground">
+            <AvatarFallback className="text-xs bg-primary text-primary-foreground font-semibold">
               {initials(user.name)}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-medium truncate">{user.name}</div>
+            <div className="text-xs font-semibold text-white truncate">{user.name}</div>
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] text-muted-foreground capitalize">{user.role}</span>
+              <span className="text-[10px] text-sidebar-foreground/70 capitalize">{user.role}</span>
               <span
                 className={cn(
                   "inline-block size-1.5 rounded-full",
@@ -214,14 +226,14 @@ export function Sidebar() {
               />
             </div>
           </div>
-          <UserCircle2 className="size-4 text-muted-foreground shrink-0" />
+          <UserCircle2 className="size-4 text-sidebar-foreground/60 shrink-0" />
         </div>
         <button
           onClick={async () => {
             await logout();
             navigate("/auth");
           }}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50 transition-colors"
+          className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm text-sidebar-foreground hover:text-white hover:bg-white/5 transition-colors"
         >
           <LogOut className="size-4 shrink-0" />
           Sign out
@@ -238,15 +250,15 @@ function NavLink({ item, path }: { item: NavItem; path: string }) {
     <Link
       to={item.to}
       className={cn(
-        "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
+        "group flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm transition-all font-medium",
         active
-          ? "bg-linear-to-r from-primary/15 to-secondary/5 text-foreground shadow-[inset_0_0_0_1px_var(--color-border)]"
-          : "text-muted-foreground hover:text-foreground hover:bg-sidebar-accent/50",
+          ? "bg-primary text-primary-foreground font-semibold shadow-sm"
+          : "text-sidebar-foreground hover:text-white hover:bg-white/5",
       )}
     >
-      <Icon className={cn("size-4 shrink-0", active && "text-primary")} />
+      <Icon className={cn("size-4 shrink-0", active ? "text-primary-foreground" : "text-sidebar-foreground group-hover:text-white")} />
       <span className="flex-1 truncate">{item.label}</span>
-      {active && <ChevronRight className="size-3.5 text-primary shrink-0" />}
+      {active && <ChevronRight className="size-3.5 text-primary-foreground shrink-0" />}
     </Link>
   );
 }

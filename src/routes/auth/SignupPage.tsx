@@ -64,9 +64,9 @@ export function SignupPage() {
             <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
           </div>
           <div className="leading-tight">
-            <div className="font-display text-lg font-semibold">VertexEMS</div>
+            <div className="font-display text-lg font-semibold">PulseHR</div>
             <div className="text-xs uppercase tracking-[0.18em] opacity-80">
-              Code Vertex Solutions
+              HR management Platform
             </div>
           </div>
         </div>
@@ -97,7 +97,7 @@ export function SignupPage() {
         </div>
 
         <div className="relative text-xs text-primary-foreground/80">
-          © {new Date().getFullYear()} Code Vertex Solutions. All rights reserved.
+          © {new Date().getFullYear()} PulseHR. All rights reserved.
         </div>
       </div>
 
@@ -108,7 +108,7 @@ export function SignupPage() {
             <div className="size-9 rounded-lg gradient-primary flex items-center justify-center p-1">
               <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
             </div>
-            <div className="font-display font-semibold">VertexEMS</div>
+            <div className="font-display font-semibold">PulseHR</div>
           </div>
 
           <h2 className="font-display text-2xl font-semibold">Create your workspace account</h2>

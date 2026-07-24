@@ -581,8 +581,8 @@ function printPayslip(p: any) {
         <div class="card">
           <div class="header">
             <div>
-              <div class="company">VertexEMS</div>
-              <div class="sub">Code Vertex Solutions · Employee Payslip</div>
+              <div class="company">PulseHR</div>
+              <div class="sub">PulseHR · Employee Payslip</div>
             </div>
             <div class="badge">PAYSLIP</div>
           </div>
@@ -626,7 +626,7 @@ function printPayslip(p: any) {
           <div class="footer">
             Generated on ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
             · This is a computer-generated payslip and does not require a signature.
-            <br/>VertexEMS Enterprise Platform · Code Vertex Solutions
+            <br/>PulseHR Enterprise Platform
           </div>
         </div>
         <script>window.onload = function() { window.print(); }</script>

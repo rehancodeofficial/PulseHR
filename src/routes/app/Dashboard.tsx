@@ -168,389 +168,303 @@ export function Dashboard() {
 function AdminDashboard({ data }: { data: any }) {
   const { employees, departments, attendance, leaveRequests, projects, tasks, assets, stats, auditLogs } = data;
   const user = useAuth((s) => s.user)!;
-  const activeEmps = employees.filter((e: any) => e.status === "active").length;
-  const inactiveEmps = employees.filter((e: any) => e.status !== "active").length;
-  
-  const today = new Date().toISOString().slice(0, 10);
-  const presentToday = attendance.filter(
-    (a: any) => a.date?.slice(0, 10) === today && (a.status === "present" || a.status === "late"),
-  ).length;
-  const attendanceRate = Math.round((presentToday / Math.max(activeEmps, 1)) * 100);
-  const pendingLeaves = leaveRequests.filter((l: any) => l.status === "pending").length;
-  const activeProjects = projects.filter((p: any) => p.status === "active").length;
-  const pendingTasks = tasks.filter((t: any) => t.status !== "done").length;
 
-  const attendanceTrend = useMemo(() => {
-    const map: Record<string, { date: string; present: number; late: number; absent: number }> = {};
-    attendance.forEach((a: any) => {
-      const k = a.date?.slice(0, 10) ?? a.date;
-      map[k] ??= { date: k, present: 0, late: 0, absent: 0 };
-      if (a.status === "present") map[k].present++;
-      else if (a.status === "late") map[k].late++;
-      else if (a.status === "absent") map[k].absent++;
-    });
-    return Object.values(map)
-      .sort((a, b) => a.date.localeCompare(b.date))
-      .slice(-14)
-      .map((r) => ({
-        ...r,
-        label: new Date(r.date).toLocaleDateString("en-GB", { day: "2-digit", month: "short" }),
-      }));
-  }, [attendance]);
+  // Derive counts & stats
+  const totalEmps = employees.length || 512;
+  const onsite = Math.round(totalEmps * 0.39) || 202;
+  const remote = totalEmps - onsite || 310;
 
-  const deptDist = departments.map((d: any) => ({
-    name: d.name,
-    value: d.headcount ?? employees.filter((e: any) => e.departmentId === d.id).length,
+  // 1. Enrollment Statistics Mocked Data matching design
+  const enrollmentData = [
+    { name: "Jan", "UI Designer": 300, "Project Manager": 200, "3D designer": 400, "UX Researcher": 300 },
+    { name: "Feb", "UI Designer": 350, "Project Manager": 250, "3D designer": 500, "UX Researcher": 300 },
+    { name: "Mar", "UI Designer": 400, "Project Manager": 200, "3D designer": 450, "UX Researcher": 350 },
+    { name: "Apr", "UI Designer": 450, "Project Manager": 300, "3D designer": 400, "UX Researcher": 400 },
+    { name: "Mei", "UI Designer": 500, "Project Manager": 350, "3D designer": 300, "UX Researcher": 250 },
+    { name: "Jun", "UI Designer": 550, "Project Manager": 400, "3D designer": 350, "UX Researcher": 300 },
+    { name: "Jul", "UI Designer": 400, "Project Manager": 300, "3D designer": 450, "UX Researcher": 350 },
+    { name: "Aug", "UI Designer": 350, "Project Manager": 250, "3D designer": 400, "UX Researcher": 300 },
+    { name: "Sep", "UI Designer": 400, "Project Manager": 300, "3D designer": 450, "UX Researcher": 350 },
+    { name: "Oct", "UI Designer": 450, "Project Manager": 350, "3D designer": 350, "UX Researcher": 400 },
+    { name: "Nov", "UI Designer": 500, "Project Manager": 400, "3D designer": 300, "UX Researcher": 350 },
+    { name: "Des", "UI Designer": 450, "Project Manager": 350, "3D designer": 400, "UX Researcher": 300 },
+  ];
+
+  // 2. Pie/Donut Chart Data for onsite vs remote
+  const pieData = [
+    { name: "Onsite", value: onsite, color: "#a3e635" },
+    { name: "Remote", value: remote, color: "#1e463a" },
+  ];
+
+  // 3. KPI Mini-Charts Data
+  const timeoffData = [
+    { value: 12 }, { value: 19 }, { value: 15 }, { value: 28 }, { value: 22 }, { value: 35 }, { value: 28 }, { value: 42 }
+  ];
+  const projectAppliedData = [
+    { value: 10 }, { value: 15 }, { value: 8 }, { value: 12 }, { value: 20 }, { value: 14 }, { value: 18 }, { value: 25 }
+  ];
+
+  // 4. Line Chart Data
+  const trackedData = [
+    { name: "W1", value: 35 },
+    { name: "W2", value: 30 },
+    { name: "W3", value: 45 },
+    { name: "W4", value: 38 },
+    { name: "W5", value: 55 },
+    { name: "W6", value: 50 },
+    { name: "W7", value: 75 },
+    { name: "W8", value: 65 },
+    { name: "W9", value: 80 },
+    { name: "W10", value: 70 },
+  ];
+
+  // 5. Leaders List
+  const topEmployees = (employees.length ? employees : [
+    { fullName: "Julian Wan", role: "UI Designer" },
+    { fullName: "Julian Wan", role: "Project Manager" },
+    { fullName: "Julian Wan", role: "3D designer" },
+    { fullName: "Julian Wan", role: "UX Researcher" },
+    { fullName: "Julian Wan", role: "Developer" },
+  ]).slice(0, 5).map((e: any, idx: number) => ({
+    rank: idx + 1,
+    name: e.fullName,
+    score: 100 - idx * Math.floor(Math.random() * 3 + 1) - idx,
+    role: e.role || "Designer",
   }));
-  const colors = [
-    "var(--color-chart-1)",
-    "var(--color-chart-2)",
-    "var(--color-chart-3)",
-    "var(--color-chart-4)",
-    "var(--color-chart-5)",
-    "var(--color-primary)",
-  ];
-
-  const leaveStats = [
-    { type: "Annual", count: leaveRequests.filter((l: any) => l.type === "annual").length },
-    { type: "Sick", count: leaveRequests.filter((l: any) => l.type === "sick").length },
-    { type: "Casual", count: leaveRequests.filter((l: any) => l.type === "casual").length },
-    { type: "Emergency", count: leaveRequests.filter((l: any) => l.type === "emergency").length },
-  ];
-
-  const upcomingHolidays = useMemo(() => {
-    const todayStr = new Date().toISOString().slice(0, 10);
-    return HOLIDAYS.filter((h) => h.date >= todayStr).slice(0, 4);
-  }, []);
 
   return (
-    <>
-      <PageHeader
-        title={`Hi, ${user.name}`}
-        description="Here's what's happening across Code Vertex Solutions today."
-        actions={
-          <>
-            <Button variant="outline" asChild>
-              <Link to="/reports">
-                <FileBarChart className="size-4" /> Reports
-              </Link>
-            </Button>
-            <Button className="gradient-primary text-primary-foreground shadow-glow" asChild>
-              <Link to="/employees">
-                <UserPlus className="size-4" /> Add employee
-              </Link>
-            </Button>
-          </>
-        }
-      />
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          label="Total employees"
-          value={employees.length}
-          icon={Users}
-          accent="primary"
-          trend={{ value: `${activeEmps} active / ${inactiveEmps} inactive` }}
-        />
-        <StatCard
-          label="Attendance rate"
-          value={`${attendanceRate}%`}
-          icon={CalendarCheck}
-          accent="success"
-          trend={{ value: "Today", positive: true }}
-        />
-        <StatCard
-          label="Total Payroll (Month)"
-          value={stats ? formatCurrency(stats.payrollThisMonth) : "—"}
-          icon={DollarSign}
-          accent="secondary"
-          trend={{ value: stats ? `${stats.payrollCount} payslips processed` : "—", positive: true }}
-        />
-        <StatCard
-          label="Leave requests"
-          value={pendingLeaves}
-          icon={Plane}
-          accent="warning"
-          trend={{ value: "Pending review" }}
-        />
-        <StatCard
-          label="Departments"
-          value={departments.length}
-          icon={Building2}
-          accent="info"
-        />
-        <StatCard
-          label="Active projects"
-          value={activeProjects}
-          icon={FolderKanban}
-          accent="primary"
-        />
-        <StatCard label="Pending tasks" value={pendingTasks} icon={ListChecks} accent="info" />
-        <StatCard label="Company assets" value={assets.length} icon={Boxes} accent="secondary" />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
-        <Card className="lg:col-span-2 p-5 glass shadow-elevated">
-          <div className="flex items-center justify-between mb-4">
+    <div className="space-y-6">
+      {/* Upper Grid: Enrollment Statistics & Employees Working */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Enrollment Statistics */}
+        <Card className="lg:col-span-2 p-6 bg-white border border-border/30 rounded-3xl shadow-xs">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="font-display font-semibold">Attendance trends</h3>
-              <p className="text-xs text-muted-foreground">Last 14 working days</p>
+              <h3 className="text-base font-bold text-foreground">Enrollment Statistics</h3>
             </div>
-            <div className="flex gap-2 text-xs">
-              <span className="flex items-center gap-1.5">
-                <span className="size-2 rounded-full bg-[--color-chart-1]" /> Present
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="size-2 rounded-full bg-[--color-chart-2]" /> Late
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="size-2 rounded-full bg-destructive" /> Absent
-              </span>
+            <button className="text-muted-foreground hover:text-foreground">
+              <span className="text-lg">•••</span>
+            </button>
+          </div>
+          {/* Custom Legends */}
+          <div className="flex flex-wrap gap-4 mb-6 text-xs font-semibold">
+            <div className="flex items-center gap-2">
+              <span className="size-2.5 rounded-full bg-[#071912]" />
+              <span className="text-muted-foreground">UI Designer</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="size-2.5 rounded-full bg-[#1e463a]" />
+              <span className="text-muted-foreground">Project Manager</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="size-2.5 rounded-full bg-[#a3e635]" />
+              <span className="text-muted-foreground">3D designer</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="size-2.5 rounded-full bg-[#d9e5df]" />
+              <span className="text-muted-foreground">UX Researcher</span>
             </div>
           </div>
-          <ResponsiveContainer width="100%" height={280}>
-            <AreaChart data={attendanceTrend}>
-              <defs>
-                <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--color-chart-1)" stopOpacity={0.5} />
-                  <stop offset="100%" stopColor="var(--color-chart-1)" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--color-chart-2)" stopOpacity={0.4} />
-                  <stop offset="100%" stopColor="var(--color-chart-2)" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-              <XAxis dataKey="label" stroke="var(--color-muted-foreground)" fontSize={11} />
-              <YAxis stroke="var(--color-muted-foreground)" fontSize={11} />
-              <Tooltip
-                contentStyle={{
-                  background: "var(--color-popover)",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: 8,
-                  fontSize: 12,
-                }}
-              />
-              <Area
-                type="monotone"
-                dataKey="present"
-                stroke="var(--color-chart-1)"
-                fill="url(#g1)"
-                strokeWidth={2}
-              />
-              <Area
-                type="monotone"
-                dataKey="late"
-                stroke="var(--color-chart-2)"
-                fill="url(#g2)"
-                strokeWidth={2}
-              />
-              <Area
-                type="monotone"
-                dataKey="absent"
-                stroke="var(--color-destructive)"
-                fill="transparent"
-                strokeWidth={2}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </Card>
-
-        <Card className="p-5 glass shadow-elevated">
-          <h3 className="font-display font-semibold">Department distribution</h3>
-          <p className="text-xs text-muted-foreground mb-2">Headcount by team</p>
-          <ResponsiveContainer width="100%" height={240}>
-            <PieChart>
-              <Pie
-                data={deptDist}
-                dataKey="value"
-                nameKey="name"
-                innerRadius={55}
-                outerRadius={85}
-                paddingAngle={2}
-              >
-                {deptDist.map((_, i) => (
-                  <Cell key={i} fill={colors[i % colors.length]} stroke="var(--color-background)" />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  background: "var(--color-popover)",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: 8,
-                  fontSize: 12,
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="space-y-1.5 text-xs">
-            {deptDist.map((d, i) => (
-              <div key={d.name} className="flex items-center justify-between">
-                <span className="flex items-center gap-2">
-                  <span
-                    className="size-2 rounded-full"
-                    style={{ background: colors[i % colors.length] }}
-                  />
-                  {d.name}
-                </span>
-                <span className="text-muted-foreground">{d.value}</span>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-        <Card className="p-5 glass shadow-elevated">
-          <h3 className="font-display font-semibold">Leave statistics</h3>
-          <p className="text-xs text-muted-foreground mb-4">By type, last 90 days</p>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={leaveStats}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
-              <XAxis dataKey="type" stroke="var(--color-muted-foreground)" fontSize={11} />
-              <YAxis stroke="var(--color-muted-foreground)" fontSize={11} />
-              <Tooltip
-                contentStyle={{
-                  background: "var(--color-popover)",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: 8,
-                  fontSize: 12,
-                }}
-              />
-              <Bar dataKey="count" fill="var(--color-primary)" radius={[6, 6, 0, 0]} />
+          <ResponsiveContainer width="100%" height={260}>
+            <BarChart data={enrollmentData} barSize={8}>
+              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: "#6b7f76", fontSize: 10, fontWeight: 500 }} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fill: "#6b7f76", fontSize: 10, fontWeight: 500 }} />
+              <Tooltip cursor={{ fill: "transparent" }} />
+              <Bar dataKey="UI Designer" stackId="a" fill="#071912" />
+              <Bar dataKey="Project Manager" stackId="a" fill="#1e463a" />
+              <Bar dataKey="3D designer" stackId="a" fill="#a3e635" />
+              <Bar dataKey="UX Researcher" stackId="a" fill="#d9e5df" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </Card>
 
-        <Card className="lg:col-span-2 p-5 glass shadow-elevated">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="font-display font-semibold">Project progress</h3>
-              <p className="text-xs text-muted-foreground">Active engagements</p>
+        {/* Employees Working */}
+        <Card className="p-6 bg-white border border-border/30 rounded-3xl shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-base font-bold text-foreground">Employees Working</h3>
+              <button className="text-muted-foreground hover:text-foreground">
+                <span className="text-lg">•••</span>
+              </button>
             </div>
-            <Button variant="ghost" size="sm" asChild>
-              <Link to="/projects">
-                View all <TrendingUp className="size-4" />
-              </Link>
-            </Button>
+            <div className="relative flex justify-center py-4">
+              <ResponsiveContainer width="100%" height={160}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    startAngle={180}
+                    endAngle={0}
+                    innerRadius={70}
+                    outerRadius={95}
+                    paddingAngle={0}
+                  >
+                    {pieData.map((entry, idx) => (
+                      <Cell key={`cell-${idx}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="absolute top-[105px] flex flex-col items-center">
+                <span className="text-3xl font-extrabold text-foreground">{totalEmps}</span>
+                <span className="text-xs text-muted-foreground font-semibold">Employees</span>
+              </div>
+            </div>
+            {/* Legend Grid */}
+            <div className="flex justify-between items-center text-xs font-semibold px-4 pt-2">
+              <div className="flex items-center gap-2">
+                <span className="size-2.5 rounded-full bg-[#a3e635]" />
+                <span className="text-foreground">{onsite} Onsite</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="size-2.5 rounded-full bg-[#1e463a]" />
+                <span className="text-foreground">{remote} Remote</span>
+              </div>
+            </div>
           </div>
-          <div className="space-y-4">
-            {projects.slice(0, 4).map((p: any) => (
-              <div key={p.id}>
-                <div className="flex items-center justify-between mb-1.5">
-                  <div>
-                    <div className="text-sm font-medium">{p.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {p.client} · Due {formatDate(p.deadline)}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <StatusBadge status={p.status} />
-                    <span className="text-sm font-semibold tabular-nums w-10 text-right">
-                      {p.progress}%
-                    </span>
-                  </div>
+          <div className="border-t border-border/40 pt-4 mt-4">
+            <Link to="/employees" className="flex items-center justify-between text-xs font-bold text-foreground hover:opacity-80 transition-opacity">
+              See all employees
+              <span className="text-sm font-semibold">→</span>
+            </Link>
+          </div>
+        </Card>
+      </div>
+
+      {/* Middle Grid: Time off, Projects Applied, Leaders */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Time Off Overview */}
+        <Card className="p-6 bg-white border border-border/30 rounded-3xl shadow-xs">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-bold text-foreground">Time off overview</h3>
+            <button className="text-muted-foreground hover:text-foreground">
+              <span className="text-lg">•••</span>
+            </button>
+          </div>
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="text-3xl font-extrabold text-foreground mb-1">102</div>
+              <div className="text-xs font-bold text-[#a3e635] flex items-center gap-1">
+                +12 ↑
+                <span className="text-muted-foreground font-semibold">Last 12 Days</span>
+              </div>
+            </div>
+            <div className="w-28 h-12">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={timeoffData}>
+                  <defs>
+                    <linearGradient id="areaLime" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#a3e635" stopOpacity={0.4} />
+                      <stop offset="100%" stopColor="#a3e635" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <Area type="monotone" dataKey="value" stroke="#a3e635" strokeWidth={2.5} fill="url(#areaLime)" dot={false} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </Card>
+
+        {/* Project Applied */}
+        <Card className="p-6 bg-white border border-border/30 rounded-3xl shadow-xs">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-sm font-bold text-foreground">Project Applied</h3>
+            <button className="text-muted-foreground hover:text-foreground">
+              <span className="text-lg">•••</span>
+            </button>
+          </div>
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="text-3xl font-extrabold text-foreground mb-1">{projects.length || 32}</div>
+              <div className="text-xs font-bold text-destructive flex items-center gap-1">
+                -09 ↓
+                <span className="text-muted-foreground font-semibold">Last 12 Days</span>
+              </div>
+            </div>
+            <div className="w-28 h-12">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={projectAppliedData}>
+                  <defs>
+                    <linearGradient id="areaRed" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--color-destructive)" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="var(--color-destructive)" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <Area type="monotone" dataKey="value" stroke="var(--color-destructive)" strokeWidth={2.5} fill="url(#areaRed)" dot={false} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </Card>
+
+        {/* Employees Rank Leaderboard */}
+        <Card className="p-6 bg-white border border-border/30 rounded-3xl shadow-xs md:col-span-2 lg:col-span-1 row-span-2 flex flex-col">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-base font-bold text-foreground">Employees Rank</h3>
+            <button className="text-muted-foreground hover:text-foreground">
+              <span className="text-lg">•••</span>
+            </button>
+          </div>
+          <div className="space-y-4 flex-1">
+            {topEmployees.map((emp: any, index: number) => (
+              <div key={index} className="flex items-center gap-3.5">
+                <div className={cn(
+                  "size-6 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0",
+                  emp.rank === 1 ? "bg-[#f59e0b]" : emp.rank === 2 ? "bg-[#94a3b8]" : emp.rank === 3 ? "bg-[#b45309]" : "bg-muted text-muted-foreground"
+                )}>
+                  {emp.rank}
                 </div>
-                <Progress value={p.progress} className="h-1.5" />
+                <Avatar className="size-8">
+                  <AvatarFallback className="text-xs bg-[#eaf0ed] text-foreground font-semibold">
+                    {initials(emp.name)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-bold text-foreground truncate">{emp.name}</div>
+                  <div className="text-[10px] text-muted-foreground font-medium truncate">{emp.role}</div>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0 text-xs font-bold text-foreground">
+                  <span className="size-2 rounded-full bg-[#f59e0b]" />
+                  {emp.score} Score
+                </div>
               </div>
             ))}
           </div>
         </Card>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-        <Card className="p-5 glass shadow-elevated">
-          <h3 className="font-display font-semibold mb-3">Recent leave requests</h3>
-          <div className="space-y-3">
-            {leaveRequests.slice(0, 5).map((l: any) => {
-              const emp = employees.find((e: any) => e.id === l.employeeId);
-              return (
-                <div key={l.id} className="flex items-center gap-3">
-                  <Avatar className="size-9">
-                    <AvatarFallback className="text-xs">
-                      {initials(emp?.fullName ?? "?")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium truncate">{emp?.fullName}</div>
-                    <div className="text-xs text-muted-foreground capitalize">
-                      {l.type} leave · {l.days}d · {formatDate(l.startDate)}
-                    </div>
-                  </div>
-                  <StatusBadge status={l.status} />
-                </div>
-              );
-            })}
+        {/* Project Tracked (takes 2 cols in lg layout alongside Leaderboard) */}
+        <Card className="p-6 bg-white border border-border/30 rounded-3xl shadow-xs md:col-span-2 lg:col-span-2">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-bold text-foreground">Project Tracked</h3>
+            <button className="text-muted-foreground hover:text-foreground">
+              <span className="text-lg">•••</span>
+            </button>
           </div>
-        </Card>
-
-        <Card className="p-5 glass shadow-elevated">
-          <h3 className="font-display font-semibold mb-3">Quick actions</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { to: "/employees", label: "Add employee", icon: UserPlus },
-              { to: "/departments", label: "Create department", icon: Building2 },
-              { to: "/projects", label: "New project", icon: FolderKanban },
-              { to: "/reports", label: "Generate report", icon: FileBarChart },
-            ].map((a) => (
-              <Link
-                key={a.to}
-                to={a.to}
-                className="group relative rounded-xl border border-border bg-card hover:border-primary/40 hover:bg-accent/40 transition-all p-4"
-              >
-                <a.icon className="size-5 text-primary mb-2" />
-                <div className="text-sm font-medium">{a.label}</div>
-                <Plus className="absolute top-3 right-3 size-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
-              </Link>
-            ))}
+          <div className="relative">
+            <ResponsiveContainer width="100%" height={150}>
+              <AreaChart data={trackedData}>
+                <defs>
+                  <linearGradient id="areaTracked" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#a3e635" stopOpacity={0.25} />
+                    <stop offset="100%" stopColor="#a3e635" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <Tooltip />
+                <Area
+                  type="monotone"
+                  dataKey="value"
+                  stroke="#a3e635"
+                  strokeWidth={3}
+                  fill="url(#areaTracked)"
+                  dot={{ stroke: '#a3e635', strokeWidth: 2, r: 4, fill: '#fff' }}
+                  activeDot={{ r: 6 }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </div>
         </Card>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-        {/* Recent Activities card */}
-        <Card className="lg:col-span-2 p-5 glass shadow-elevated">
-          <h3 className="font-display font-semibold mb-3">Recent Activities</h3>
-          <div className="space-y-3">
-            {auditLogs.length === 0 ? (
-              <p className="text-sm text-muted-foreground py-4">No recent activities logged.</p>
-            ) : (
-              auditLogs.slice(0, 5).map((l: any) => (
-                <div key={l.id} className="flex items-center justify-between text-sm py-1.5 border-b border-border last:border-0">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                      <Clock className="size-4" />
-                    </div>
-                    <div className="truncate">
-                      <span className="font-semibold text-foreground mr-1.5">{l.actorName || l.actor || "System"}</span>
-                      <span className="text-muted-foreground mr-1.5">{l.action.toLowerCase().replace(/_/g, " ")}</span>
-                      <span className="text-foreground font-medium">{l.target}</span>
-                    </div>
-                  </div>
-                  <span className="text-[10px] text-muted-foreground shrink-0 pl-2">{relativeTime(l.timestamp)}</span>
-                </div>
-              ))
-            )}
-          </div>
-        </Card>
-
-        {/* Upcoming Holidays card */}
-        <Card className="p-5 glass shadow-elevated">
-          <h3 className="font-display font-semibold mb-3">Upcoming Holidays</h3>
-          <div className="space-y-3">
-            {upcomingHolidays.map((h: any) => (
-              <div key={h.name} className="flex justify-between items-center text-sm py-1 border-b border-border last:border-0">
-                <span className="font-medium text-foreground flex items-center gap-2">
-                  <Calendar className="size-4 text-primary" />
-                  {h.name}
-                </span>
-                <span className="text-xs text-muted-foreground">{formatDate(h.date)}</span>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
-    </>
+    </div>
   );
 }
 
@@ -620,7 +534,7 @@ function EmployeeDashboard({ data }: { data: any }) {
     <>
       <PageHeader
         title={`Hi, ${user.name}`}
-        description="Your personal workspace at Code Vertex Solutions."
+        description="Your personal workspace at PulseHR."
         actions={
           <>
             <Button variant="outline" asChild>

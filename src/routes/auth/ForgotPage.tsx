@@ -18,7 +18,7 @@ export function ForgotPage() {
           <div className="size-9 rounded-lg gradient-primary flex items-center justify-center shadow-glow p-1">
             <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
           </div>
-          <div className="font-display font-semibold">VertexEMS</div>
+          <div className="font-display font-semibold">PulseHR</div>
         </div>
         <h2 className="font-display text-2xl font-semibold">Reset your password</h2>
         <p className="mt-1.5 text-sm text-muted-foreground">
