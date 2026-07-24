@@ -192,7 +192,7 @@ export function Dashboard() {
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
-              <div className="absolute top-[85px] inset-x-0 flex flex-col items-center">
+              <div className="absolute top-21.25 inset-x-0 flex flex-col items-center">
                 <span className="text-3xl font-extrabold text-foreground">{totalEmps}</span>
                 <span className="text-xs text-muted-foreground font-semibold">Employees</span>
               </div>
