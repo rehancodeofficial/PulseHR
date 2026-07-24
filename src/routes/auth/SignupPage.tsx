@@ -1,9 +1,35 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "@/lib/auth-store";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, Sun, Moon } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "@/components/theme-provider";
 import type { Role } from "@/types";
+
+/* ─── Floating theme toggle ─── */
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const isDark =
+    theme === "dark" ||
+    (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  return (
+    <button
+      type="button"
+      aria-label="Toggle theme"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="fixed top-4 right-4 z-50 flex items-center justify-center rounded-2xl transition-all duration-200"
+      style={{
+        width: 40,
+        height: 40,
+        background: "var(--card)",
+        boxShadow: "var(--shadow-glow)",
+        color: "var(--foreground)",
+      }}
+    >
+      {isDark ? <Sun className="size-4.5" /> : <Moon className="size-4.5" />}
+    </button>
+  );
+}
 
 /* ─── Shared clay input ─── */
 function ClayInput({
@@ -29,18 +55,17 @@ function ClayInput({
       onChange={onChange}
       placeholder={placeholder}
       required={required}
-      className="clay-input w-full h-11 px-4 text-sm placeholder:text-[#7A9070] focus:outline-none"
+      className="clay-input w-full h-11 px-4 text-sm focus:outline-none"
       style={{
-        boxShadow:
-          "inset 3px 3px 8px rgba(45,74,43,0.14), inset -2px -2px 6px rgba(255,255,255,0.78)",
+        background: "var(--input)",
+        color: "var(--foreground)",
+        boxShadow: "var(--shadow-inset)",
       }}
       onFocus={(e) => {
-        e.currentTarget.style.boxShadow =
-          "inset 3px 3px 10px rgba(45,74,43,0.18), inset -2px -2px 6px rgba(255,255,255,0.78), 0 0 0 2.5px rgba(139,170,60,0.45)";
+        e.currentTarget.style.boxShadow = "var(--shadow-inset), 0 0 0 2.5px var(--ring)";
       }}
       onBlur={(e) => {
-        e.currentTarget.style.boxShadow =
-          "inset 3px 3px 8px rgba(45,74,43,0.14), inset -2px -2px 6px rgba(255,255,255,0.78)";
+        e.currentTarget.style.boxShadow = "var(--shadow-inset)";
       }}
     />
   );
@@ -65,16 +90,15 @@ function ClaySelect({
       onChange={onChange}
       className="clay-select w-full h-11 px-4 text-sm focus:outline-none"
       style={{
-        boxShadow:
-          "inset 3px 3px 8px rgba(45,74,43,0.14), inset -2px -2px 6px rgba(255,255,255,0.78)",
+        background: "var(--input)",
+        color: "var(--foreground)",
+        boxShadow: "var(--shadow-inset)",
       }}
       onFocus={(e) => {
-        e.currentTarget.style.boxShadow =
-          "inset 3px 3px 10px rgba(45,74,43,0.18), inset -2px -2px 6px rgba(255,255,255,0.78), 0 0 0 2.5px rgba(139,170,60,0.45)";
+        e.currentTarget.style.boxShadow = "var(--shadow-inset), 0 0 0 2.5px var(--ring)";
       }}
       onBlur={(e) => {
-        e.currentTarget.style.boxShadow =
-          "inset 3px 3px 8px rgba(45,74,43,0.14), inset -2px -2px 6px rgba(255,255,255,0.78)";
+        e.currentTarget.style.boxShadow = "var(--shadow-inset)";
       }}
     >
       {children}
@@ -109,7 +133,7 @@ export function SignupPage() {
       const res = await signup(fullName, email, password, departmentId, designation, role);
       if (res?.isPending) {
         toast.success(
-          "Registration request submitted! Your account is pending administrator approval.",
+          "Registration request submitted. Your account is pending administrator approval.",
         );
         navigate("/auth");
       } else {
@@ -126,16 +150,15 @@ export function SignupPage() {
 
   return (
     <div
-      className="min-h-screen grid lg:grid-cols-2"
-      style={{ background: "linear-gradient(160deg, #EDF2E6 0%, #E4ECD9 50%, #DDE8D0 100%)" }}
+      className="min-h-screen grid lg:grid-cols-2 transition-colors duration-200"
+      style={{ background: "var(--background)" }}
     >
+      <ThemeToggle />
+
       {/* ── Left clay hero panel ── */}
       <div
         className="relative hidden lg:flex flex-col justify-between p-12 overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(145deg, #3A5C38 0%, #4A6741 28%, #5C7A3E 58%, #3D5C2A 100%)",
-        }}
+        style={{ background: "var(--gradient-primary)" }}
       >
         {/* Blob orbs */}
         <div
@@ -146,7 +169,7 @@ export function SignupPage() {
             width: "340px",
             height: "340px",
             borderRadius: "999px",
-            background: "radial-gradient(circle, rgba(168,196,138,0.28) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%)",
             filter: "blur(2px)",
           }}
         />
@@ -170,7 +193,7 @@ export function SignupPage() {
             width: "180px",
             height: "180px",
             borderRadius: "999px",
-            background: "radial-gradient(circle, rgba(139,170,60,0.18) 0%, transparent 65%)",
+            background: "radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 65%)",
           }}
         />
 
@@ -178,11 +201,11 @@ export function SignupPage() {
         <div className="relative flex items-center gap-3">
           <div
             className="clay-logo flex items-center justify-center p-2.5"
-            style={{ width: 48, height: 48 }}
+            style={{ width: 48, height: 48, background: "var(--card)", boxShadow: "var(--shadow-glow)" }}
           >
             <img src="/logo.png" alt="PulseHR Logo" className="w-full h-full object-contain" />
           </div>
-          <div className="leading-tight text-white">
+          <div className="leading-tight" style={{ color: "var(--primary-foreground)" }}>
             <div className="font-display text-lg font-bold tracking-tight">PulseHR</div>
             <div className="text-[10px] uppercase tracking-[0.22em] opacity-75">
               HR Management Platform
@@ -191,20 +214,23 @@ export function SignupPage() {
         </div>
 
         {/* Hero copy */}
-        <div className="relative text-white space-y-7">
-          <div className="clay-badge inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] px-4 py-2 text-white/90">
-            <Sparkles className="size-3.5 text-[#c8e07a]" />
+        <div className="relative space-y-7" style={{ color: "var(--primary-foreground)" }}>
+          <div
+            className="clay-badge inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] px-4 py-2"
+            style={{ background: "rgba(255,255,255,0.12)", color: "var(--primary-foreground)" }}
+          >
+            <Sparkles className="size-3.5" />
             Enterprise EMS Platform
           </div>
 
           <h1
             className="font-display text-5xl font-bold leading-[1.06] max-w-md"
-            style={{ color: "#ffffff", textShadow: "0 2px 12px rgba(0,0,0,0.18)" }}
+            style={{ color: "var(--primary-foreground)", textShadow: "0 2px 12px rgba(0,0,0,0.15)" }}
           >
             Join the premium enterprise workspace today.
           </h1>
 
-          <p className="text-base max-w-md" style={{ color: "rgba(255,255,255,0.84)" }}>
+          <p className="text-base max-w-md opacity-90">
             Set up your professional identity, select your workspace department, and access unified
             tracking features instantly.
           </p>
@@ -216,15 +242,19 @@ export function SignupPage() {
               ["RBAC", "First-class"],
               ["Realtime", "Insights"],
             ].map(([v, l]) => (
-              <div key={l} className="clay-stat-pill flex flex-col gap-0.5">
-                <div className="font-display text-2xl font-bold text-white">{v}</div>
-                <div className="text-[10px] uppercase tracking-wider text-white/72">{l}</div>
+              <div
+                key={l}
+                className="clay-stat-pill flex flex-col gap-0.5"
+                style={{ background: "rgba(255,255,255,0.1)", boxShadow: "var(--shadow-glow)" }}
+              >
+                <div className="font-display text-2xl font-bold" style={{ color: "var(--primary-foreground)" }}>{v}</div>
+                <div className="text-[10px] uppercase tracking-wider opacity-80" style={{ color: "var(--primary-foreground)" }}>{l}</div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="relative text-[11px]" style={{ color: "rgba(255,255,255,0.60)" }}>
+        <div className="relative text-[11px] opacity-70" style={{ color: "var(--primary-foreground)" }}>
           © {new Date().getFullYear()} PulseHR. All rights reserved.
         </div>
       </div>
@@ -234,32 +264,32 @@ export function SignupPage() {
         <div
           className="clay-card w-full max-w-md p-9 my-8"
           style={{
-            boxShadow:
-              "10px 10px 28px rgba(45,74,43,0.17), -7px -7px 18px rgba(255,255,255,0.86), inset 0 1px 0 rgba(255,255,255,0.65)",
+            background: "var(--card)",
+            boxShadow: "var(--shadow-elevated)",
           }}
         >
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2.5 mb-6">
             <div
               className="clay-logo flex items-center justify-center p-1.5"
-              style={{ width: 38, height: 38 }}
+              style={{ width: 38, height: 38, background: "var(--card)", boxShadow: "var(--shadow-glow)" }}
             >
               <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
             </div>
-            <div className="font-display font-bold text-[#1F2B1A]">PulseHR</div>
+            <div className="font-display font-bold" style={{ color: "var(--foreground)" }}>PulseHR</div>
           </div>
 
-          <h2 className="font-display text-2xl font-bold" style={{ color: "#1F2B1A" }}>
+          <h2 className="font-display text-2xl font-bold" style={{ color: "var(--foreground)" }}>
             Create your workspace account
           </h2>
-          <p className="mt-1.5 text-sm" style={{ color: "#5A7255" }}>
+          <p className="mt-1.5 text-sm" style={{ color: "var(--muted-foreground)" }}>
             Complete the form below to register on the platform.
           </p>
 
           <form className="mt-7 space-y-4" onSubmit={onSubmit}>
             {/* Full name */}
             <div className="space-y-1.5">
-              <label htmlFor="fullName" className="block text-sm font-semibold" style={{ color: "#2D4A2B" }}>
+              <label htmlFor="fullName" className="block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
                 Full Name
               </label>
               <ClayInput
@@ -273,7 +303,7 @@ export function SignupPage() {
 
             {/* Email */}
             <div className="space-y-1.5">
-              <label htmlFor="email" className="block text-sm font-semibold" style={{ color: "#2D4A2B" }}>
+              <label htmlFor="email" className="block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
                 Work Email
               </label>
               <ClayInput
@@ -288,7 +318,7 @@ export function SignupPage() {
 
             {/* Password */}
             <div className="space-y-1.5">
-              <label htmlFor="password" className="block text-sm font-semibold" style={{ color: "#2D4A2B" }}>
+              <label htmlFor="password" className="block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
                 Password
               </label>
               <ClayInput
@@ -304,7 +334,7 @@ export function SignupPage() {
             {/* Department + Role (2-col) */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <label htmlFor="department" className="block text-sm font-semibold" style={{ color: "#2D4A2B" }}>
+                <label htmlFor="department" className="block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
                   Department
                 </label>
                 <ClaySelect
@@ -322,7 +352,7 @@ export function SignupPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="role" className="block text-sm font-semibold" style={{ color: "#2D4A2B" }}>
+                <label htmlFor="role" className="block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
                   Work Role
                 </label>
                 <ClaySelect
@@ -340,7 +370,7 @@ export function SignupPage() {
 
             {/* Designation */}
             <div className="space-y-1.5">
-              <label htmlFor="designation" className="block text-sm font-semibold" style={{ color: "#2D4A2B" }}>
+              <label htmlFor="designation" className="block text-sm font-semibold" style={{ color: "var(--foreground)" }}>
                 Designation
               </label>
               <ClayInput
@@ -352,29 +382,26 @@ export function SignupPage() {
               />
             </div>
 
-            {/* Clay submit button */}
+            {/* Submit button */}
             <button
               type="submit"
               disabled={loading}
               className="clay-button w-full h-11 flex items-center justify-center text-sm font-bold tracking-wide mt-2"
               style={{
-                background: loading
-                  ? "linear-gradient(145deg, #7A9830, #5A7820)"
-                  : "linear-gradient(145deg, #8BAA3C 0%, #6B8A2A 60%, #4E6B1F 100%)",
-                boxShadow:
-                  "5px 5px 16px rgba(45,74,43,0.30), -3px -3px 10px rgba(255,255,255,0.60), inset 0 1px 0 rgba(255,255,255,0.28)",
+                background: "var(--gradient-primary)",
+                boxShadow: "var(--shadow-glow)",
                 opacity: loading ? 0.8 : 1,
               }}
             >
               {loading ? <Loader2 className="size-4 animate-spin" /> : "Register Account"}
             </button>
 
-            <div className="text-center text-sm pt-1" style={{ color: "#5A7255" }}>
+            <div className="text-center text-sm pt-1" style={{ color: "var(--muted-foreground)" }}>
               Already have an account?{" "}
               <Link
                 to="/auth"
                 className="font-semibold hover:underline"
-                style={{ color: "#5C7A2A" }}
+                style={{ color: "var(--primary)" }}
               >
                 Sign in
               </Link>

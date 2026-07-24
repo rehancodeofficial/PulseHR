@@ -1,7 +1,33 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Sun, Moon } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "@/components/theme-provider";
+
+/* ─── Floating theme toggle ─── */
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const isDark =
+    theme === "dark" ||
+    (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  return (
+    <button
+      type="button"
+      aria-label="Toggle theme"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="fixed top-4 right-4 z-50 flex items-center justify-center rounded-2xl transition-all duration-200"
+      style={{
+        width: 40,
+        height: 40,
+        background: "var(--card)",
+        boxShadow: "var(--shadow-glow)",
+        color: "var(--foreground)",
+      }}
+    >
+      {isDark ? <Sun className="size-4.5" /> : <Moon className="size-4.5" />}
+    </button>
+  );
+}
 
 export function ForgotPage() {
   const [email, setEmail] = useState("");
@@ -9,34 +35,36 @@ export function ForgotPage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-6"
-      style={{ background: "linear-gradient(160deg, #EDF2E6 0%, #E4ECD9 50%, #DDE8D0 100%)" }}
+      className="min-h-screen flex items-center justify-center p-6 transition-colors duration-200"
+      style={{ background: "var(--background)" }}
     >
+      <ThemeToggle />
+
       {/* Clay card */}
       <div
         className="clay-card w-full max-w-md p-9"
         style={{
-          boxShadow:
-            "10px 10px 28px rgba(45,74,43,0.17), -7px -7px 18px rgba(255,255,255,0.86), inset 0 1px 0 rgba(255,255,255,0.65)",
+          background: "var(--card)",
+          boxShadow: "var(--shadow-elevated)",
         }}
       >
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-7">
           <div
             className="clay-logo flex items-center justify-center p-2"
-            style={{ width: 44, height: 44 }}
+            style={{ width: 44, height: 44, background: "var(--card)", boxShadow: "var(--shadow-glow)" }}
           >
             <img src="/logo.png" alt="PulseHR Logo" className="w-full h-full object-contain" />
           </div>
-          <div className="font-display font-bold text-xl" style={{ color: "#1F2B1A" }}>
+          <div className="font-display font-bold text-xl" style={{ color: "var(--foreground)" }}>
             PulseHR
           </div>
         </div>
 
-        <h2 className="font-display text-2xl font-bold" style={{ color: "#1F2B1A" }}>
+        <h2 className="font-display text-2xl font-bold" style={{ color: "var(--foreground)" }}>
           Reset your password
         </h2>
-        <p className="mt-1.5 text-sm" style={{ color: "#5A7255" }}>
+        <p className="mt-1.5 text-sm" style={{ color: "var(--muted-foreground)" }}>
           Enter your work email and we'll send you a recovery link.
         </p>
 
@@ -44,11 +72,10 @@ export function ForgotPage() {
           <div
             className="mt-6 p-4 text-sm"
             style={{
-              background: "rgba(107,142,78,0.12)",
+              background: "var(--muted)",
               borderRadius: 16,
-              color: "#3A5C20",
-              boxShadow:
-                "inset 2px 2px 6px rgba(45,74,43,0.12), inset -1px -1px 4px rgba(255,255,255,0.6)",
+              color: "var(--foreground)",
+              boxShadow: "var(--shadow-inset)",
             }}
           >
             If <strong>{email}</strong> exists in our directory, a reset link is on its way.
@@ -67,7 +94,7 @@ export function ForgotPage() {
               <label
                 htmlFor="email"
                 className="block text-sm font-semibold"
-                style={{ color: "#2D4A2B" }}
+                style={{ color: "var(--foreground)" }}
               >
                 Work email
               </label>
@@ -78,18 +105,18 @@ export function ForgotPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@company.com"
                 required
-                className="clay-input w-full h-11 px-4 text-sm placeholder:text-[#7A9070] focus:outline-none"
+                className="clay-input w-full h-11 px-4 text-sm focus:outline-none"
                 style={{
-                  boxShadow:
-                    "inset 3px 3px 8px rgba(45,74,43,0.14), inset -2px -2px 6px rgba(255,255,255,0.78)",
+                  background: "var(--input)",
+                  color: "var(--foreground)",
+                  boxShadow: "var(--shadow-inset)",
                 }}
                 onFocus={(e) => {
                   e.currentTarget.style.boxShadow =
-                    "inset 3px 3px 10px rgba(45,74,43,0.18), inset -2px -2px 6px rgba(255,255,255,0.78), 0 0 0 2.5px rgba(139,170,60,0.45)";
+                    "var(--shadow-inset), 0 0 0 2.5px var(--ring)";
                 }}
                 onBlur={(e) => {
-                  e.currentTarget.style.boxShadow =
-                    "inset 3px 3px 8px rgba(45,74,43,0.14), inset -2px -2px 6px rgba(255,255,255,0.78)";
+                  e.currentTarget.style.boxShadow = "var(--shadow-inset)";
                 }}
               />
             </div>
@@ -98,9 +125,8 @@ export function ForgotPage() {
               type="submit"
               className="clay-button w-full h-11 flex items-center justify-center text-sm font-bold tracking-wide"
               style={{
-                background: "linear-gradient(145deg, #8BAA3C 0%, #6B8A2A 60%, #4E6B1F 100%)",
-                boxShadow:
-                  "5px 5px 16px rgba(45,74,43,0.30), -3px -3px 10px rgba(255,255,255,0.60), inset 0 1px 0 rgba(255,255,255,0.28)",
+                background: "var(--gradient-primary)",
+                boxShadow: "var(--shadow-glow)",
               }}
             >
               Send recovery link
@@ -111,7 +137,7 @@ export function ForgotPage() {
         <Link
           to="/auth"
           className="mt-7 inline-flex items-center gap-2 text-sm font-medium hover:underline"
-          style={{ color: "#5C7A2A" }}
+          style={{ color: "var(--primary)" }}
         >
           <ArrowLeft className="size-4" />
           Back to sign in

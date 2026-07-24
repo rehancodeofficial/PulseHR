@@ -1,8 +1,35 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "@/lib/auth-store";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, Sun, Moon } from "lucide-react";
 import { toast } from "sonner";
+import { useTheme } from "@/components/theme-provider";
+
+/* ─── Floating theme toggle ─── */
+function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+  const isDark =
+    theme === "dark" ||
+    (theme === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+  return (
+    <button
+      type="button"
+      aria-label="Toggle theme"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className="fixed top-4 right-4 z-50 flex items-center justify-center rounded-2xl transition-all duration-200"
+      style={{
+        width: 40,
+        height: 40,
+        background: "var(--card)",
+        boxShadow: "var(--shadow-glow)",
+        color: "var(--foreground)",
+      }}
+    >
+      {isDark ? <Sun className="size-4.5" /> : <Moon className="size-4.5" />}
+    </button>
+  );
+}
+
 
 /* ─── Clay helper: input wrapper with carved inset groove ─── */
 function ClayInput({
@@ -84,6 +111,7 @@ export function LoginPage() {
       className="min-h-screen grid lg:grid-cols-2 transition-colors duration-200"
       style={{ background: "var(--background)" }}
     >
+      <ThemeToggle />
       {/* ── Left clay hero panel ── */}
       <div
         className="relative hidden lg:flex flex-col justify-between p-12 overflow-hidden"
