@@ -81,7 +81,7 @@ async function main() {
   });
 
   console.log(`Seed completed.`);
-  console.log(`   Admin login: admin@workzen.solutions`);
+  console.log(`   Admin login: admin@pulsehr.solutions`);
   console.log(`   Password:    ${config.DEFAULT_EMPLOYEE_PASSWORD || "ChangeMe@Prod1"}`);
   console.log(`   Change the admin password immediately after first login in production.`);
 }

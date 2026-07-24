@@ -136,7 +136,7 @@ export function SignupPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="jane.doe@codevertex.io"
+                placeholder="jane.doe@pulsehr.solutions"
                 required
               />
             </div>
