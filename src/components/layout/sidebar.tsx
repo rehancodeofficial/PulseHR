@@ -16,7 +16,6 @@ import {
   ScrollText,
   LogOut,
   ChevronRight,
-  Hexagon,
   DollarSign,
   UserCircle2,
 } from "lucide-react";
@@ -136,6 +135,14 @@ const nav: NavItem[] = [
   },
 ];
 
+/* ── Clay sidebar shadow token ── */
+const SIDEBAR_SHADOW =
+  "8px 0 24px rgba(45,74,43,0.12), -4px 0 12px rgba(255,255,255,0.7)";
+const ACTIVE_PILL_SHADOW =
+  "4px 4px 12px rgba(45,74,43,0.22), -2px -2px 8px rgba(255,255,255,0.55), inset 0 1px 0 rgba(255,255,255,0.25)";
+const AVATAR_SHADOW =
+  "3px 3px 8px rgba(45,74,43,0.18), -2px -2px 6px rgba(255,255,255,0.70)";
+
 export function Sidebar() {
   const { pathname: path } = useLocation();
   const user = useAuth((s) => s.user);
@@ -151,89 +158,131 @@ export function Sidebar() {
   const adminItems = items.filter((i) => i.section === "admin");
 
   return (
-    <aside className="hidden md:flex w-64 min-w-[16rem] max-w-[16rem] flex-col bg-sidebar h-screen sticky top-0 border-r border-sidebar-border/10">
+    <aside
+      className="hidden md:flex w-64 min-w-[16rem] max-w-[16rem] flex-col h-screen sticky top-0"
+      style={{
+        background: "#FAFAF7",
+        boxShadow: SIDEBAR_SHADOW,
+        zIndex: 30,
+      }}
+    >
       {/* Logo */}
-      <div className="flex flex-col gap-1 px-6 py-7 shrink-0">
-        <div className="text-2xl font-bold tracking-tight text-white">PulseHR</div>
-        <div className="text-[10px] tracking-wider text-sidebar-foreground/60 font-medium">
-          HR management Platform
+      <div className="flex items-center gap-3 px-6 py-7 shrink-0">
+        <div
+          className="flex items-center justify-center p-2 shrink-0"
+          style={{
+            width: 40,
+            height: 40,
+            background: "linear-gradient(145deg, #46613D, #2A3E28)",
+            borderRadius: 14,
+            boxShadow: "4px 4px 10px rgba(45,74,43,0.28), -2px -2px 6px rgba(255,255,255,0.6)",
+          }}
+        >
+          <img src="/logo.png" alt="PulseHR" className="w-full h-full object-contain" />
+        </div>
+        <div>
+          <div className="text-base font-bold tracking-tight" style={{ color: "#2A3324" }}>
+            PulseHR
+          </div>
+          <div className="text-[10px] tracking-wide font-medium" style={{ color: "#6B7862" }}>
+            HR Management Platform
+          </div>
         </div>
       </div>
 
       {/* Nav — scrollable */}
       <nav className="flex-1 overflow-y-auto scrollbar-thin px-3 py-2 space-y-1">
         {/* Workspace section */}
-        <div className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-sidebar-foreground/45">
+        <div
+          className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em]"
+          style={{ color: "#9CB56E" }}
+        >
           Main Menu
         </div>
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           {workspaceItems.map((item) => (
-            <NavLink key={item.to} item={item} path={path} />
+            <NavLink key={item.to} item={item} path={path} activePillShadow={ACTIVE_PILL_SHADOW} />
           ))}
         </div>
 
-        {/* Admin Tools section — only if user has admin-section items */}
+        {/* Admin Tools section */}
         {adminItems.length > 0 && (
           <div className="pt-4">
-            <div className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-sidebar-foreground/45">
+            <div
+              className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: "#9CB56E" }}
+            >
               {isEmployee ? "Resources" : "Admin Tools"}
             </div>
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {adminItems.map((item) => (
-                <NavLink key={item.to} item={item} path={path} />
+                <NavLink key={item.to} item={item} path={path} activePillShadow={ACTIVE_PILL_SHADOW} />
               ))}
             </div>
           </div>
         )}
       </nav>
 
-      {/* Upgrade to Premium Card */}
-      <div className="px-4 py-3 shrink-0">
-        <div className="rounded-2xl bg-linear-to-br from-[#123126] to-[#0a1a14] p-4 border border-white/5 shadow-md relative overflow-hidden">
-          <div className="text-xs font-bold text-white mb-1">Upgrade to Premium</div>
-          <div className="text-[10px] text-sidebar-foreground/70 leading-relaxed mb-3">
-            Get interesting features and can improve your performance.
-          </div>
-          <button className="w-full py-2 px-3 bg-primary text-primary-foreground font-semibold text-xs rounded-xl shadow-sm hover:opacity-90 transition-opacity">
-            Upgrade Now
-          </button>
-        </div>
-      </div>
-
       {/* User footer */}
-      <div className="border-t border-sidebar-border/10 p-3 shrink-0">
-        <div className="flex items-center gap-2.5 mb-2 px-2 py-1.5 rounded-xl hover:bg-white/5 transition-colors cursor-default">
-          <Avatar className="size-8 shrink-0">
-            <AvatarFallback className="text-xs bg-primary text-primary-foreground font-semibold">
-              {initials(user.name)}
-            </AvatarFallback>
-          </Avatar>
+      <div className="px-4 pb-5 pt-3 shrink-0">
+        {/* User card */}
+        <div
+          className="flex items-center gap-2.5 mb-3 px-3 py-3 rounded-2xl"
+          style={{
+            background: "#EFF4E7",
+            boxShadow: "inset 2px 2px 6px rgba(45,74,43,0.1), inset -1px -1px 4px rgba(255,255,255,0.65)",
+          }}
+        >
+          <div
+            className="shrink-0"
+            style={{
+              borderRadius: "50%",
+              boxShadow: AVATAR_SHADOW,
+            }}
+          >
+            <Avatar className="size-8">
+              <AvatarFallback
+                className="text-xs font-bold"
+                style={{
+                  background: "linear-gradient(145deg, #9CB56E, #5C7A45)",
+                  color: "#FAFAF7",
+                }}
+              >
+                {initials(user.name)}
+              </AvatarFallback>
+            </Avatar>
+          </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-white truncate">{user.name}</div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] text-sidebar-foreground/70 capitalize">{user.role}</span>
-              <span
-                className={cn(
-                  "inline-block size-1.5 rounded-full",
-                  role === "admin"
-                    ? "bg-destructive"
-                    : role === "manager"
-                      ? "bg-[--color-warning]"
-                      : role === "accountant"
-                        ? "bg-[--color-info]"
-                        : "bg-success",
-                )}
-              />
+            <div className="text-xs font-bold truncate" style={{ color: "#2A3324" }}>
+              {user.name}
+            </div>
+            <div className="text-[10px] capitalize" style={{ color: "#6B7862" }}>
+              {user.role}
             </div>
           </div>
-          <UserCircle2 className="size-4 text-sidebar-foreground/60 shrink-0" />
+          <UserCircle2 className="size-4 shrink-0" style={{ color: "#9CB56E" }} />
         </div>
+
+        {/* Sign out */}
         <button
           onClick={async () => {
             await logout();
             navigate("/auth");
           }}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm text-sidebar-foreground hover:text-white hover:bg-white/5 transition-colors"
+          className="flex w-full items-center gap-3 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all"
+          style={{
+            color: "#C17A64",
+            background: "transparent",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "#FFF0EC";
+            e.currentTarget.style.boxShadow =
+              "3px 3px 8px rgba(193,122,100,0.12), -2px -2px 6px rgba(255,255,255,0.7)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "transparent";
+            e.currentTarget.style.boxShadow = "none";
+          }}
         >
           <LogOut className="size-4 shrink-0" />
           Sign out
@@ -243,22 +292,58 @@ export function Sidebar() {
   );
 }
 
-function NavLink({ item, path }: { item: NavItem; path: string }) {
+function NavLink({
+  item,
+  path,
+  activePillShadow,
+}: {
+  item: NavItem;
+  path: string;
+  activePillShadow: string;
+}) {
   const active = path === item.to || path.startsWith(item.to + "/");
   const Icon = item.icon;
+
   return (
     <Link
       to={item.to}
       className={cn(
-        "group flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm transition-all font-medium",
-        active
-          ? "bg-primary text-primary-foreground font-semibold shadow-sm"
-          : "text-sidebar-foreground hover:text-white hover:bg-white/5",
+        "group flex items-center gap-3 rounded-2xl px-4 py-2.5 text-sm transition-all font-medium",
       )}
+      style={
+        active
+          ? {
+              background: "linear-gradient(145deg, #9CB56E 0%, #5C7A45 100%)",
+              color: "#FAFAF7",
+              boxShadow: activePillShadow,
+              fontWeight: 700,
+            }
+          : {
+              color: "#6B7862",
+            }
+      }
+      onMouseEnter={(e) => {
+        if (!active) {
+          e.currentTarget.style.background = "#EFF4E7";
+          e.currentTarget.style.color = "#2A3324";
+          e.currentTarget.style.boxShadow =
+            "inset 2px 2px 5px rgba(45,74,43,0.08), inset -1px -1px 3px rgba(255,255,255,0.6)";
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!active) {
+          e.currentTarget.style.background = "transparent";
+          e.currentTarget.style.color = "#6B7862";
+          e.currentTarget.style.boxShadow = "none";
+        }
+      }}
     >
-      <Icon className={cn("size-4 shrink-0", active ? "text-primary-foreground" : "text-sidebar-foreground group-hover:text-white")} />
+      <Icon
+        className="size-4 shrink-0"
+        style={{ color: active ? "#FAFAF7" : "#9CB56E" }}
+      />
       <span className="flex-1 truncate">{item.label}</span>
-      {active && <ChevronRight className="size-3.5 text-primary-foreground shrink-0" />}
+      {active && <ChevronRight className="size-3.5 shrink-0" style={{ color: "#FAFAF7" }} />}
     </Link>
   );
 }
